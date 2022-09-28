@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # unreal-sdk-algorand
 This repo is providing unreal C++ sdk on algorand chain.
 =======
@@ -136,5 +135,3 @@ Checkout the [Readme](/tests/README.md) for more information.
 2.  Fork the repository on GitHub to start making your changes. As a general rule, you should use the "development" branch as a basis.
 3.  Write a test which shows that the bug was fixed or that the feature works as expected.
 4.  Send a pull request and bug us until it gets merged and published. Contributions may need some modifications, so work with us to get your change accepted!
-
->>>>>>> Initail Commit
