@@ -1,0 +1,11 @@
+name: vertices
+channels:
+  - conda-forge
+dependencies:
+  - python=3.8
+  - conda-forge::cmake
+  - ninja
+  - conda-forge::libcurl # For Unix example
+  - conda-forge::libsodium # For Unix example
+  - pyserial
+  - ccache

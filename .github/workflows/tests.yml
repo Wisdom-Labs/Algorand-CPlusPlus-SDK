@@ -1,0 +1,49 @@
+name: tests
+
+on:
+  push:
+    tags:
+      - 'v/*'
+
+env:
+  # Not used yet: Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: Debug
+
+jobs:
+  all:
+    runs-on: ubuntu-latest
+
+    container:
+      image: fouge/vertices:latest
+      volumes:
+        - ${{github.workspace}}:/home/project/
+
+    steps:
+    - name: Checkout repo and submodules
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
+
+    - name: Unit tests
+      working-directory: ${{github.workspace}}
+      shell: bash
+      run: |
+        make -C tests clean
+        make -C tests all
+
+    - name: Build
+      working-directory: ${{github.workspace}}
+      shell: bash
+      run: make all
+
+    - name: Alice & Bob
+      working-directory: ${{github.workspace}}
+      shell: bash
+      env:
+        ACCOUNT_KEYS: ${{ secrets.ACCOUNT_KEYS }}
+      # first copy the private key into file
+      # then starts the example: Alice send 1 Algo to Bob
+      run: |
+        ./utils/str_to_bin.py "$ACCOUNT_KEYS" examples/unix/config/private_key.bin
+        echo "$ACCOUNT_ADDRESS" >> examples/unix/config/public_b32.txt
+        ./build/examples/unix/unix_example

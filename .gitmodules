@@ -1,0 +1,9 @@
+[submodule "external/mpack"]
+	path = external/mpack
+	url = https://github.com/vertices-network/mpack
+[submodule "external/cJSON"]
+	path = external/cJSON
+	url = https://github.com/DaveGamble/cJSON.git
+[submodule "external/mbedtls"]
+	path = external/mbedtls
+	url = https://github.com/ARMmbed/mbedtls
