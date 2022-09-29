@@ -16,3 +16,4 @@ private_config.h
 
 *.bin
 build/
+.idea/
