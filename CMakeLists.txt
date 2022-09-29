@@ -22,20 +22,7 @@ if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
     set(COMPILE_UNIX ON)
 endif()
 
-# At this point there are two different targets possible:
-# - ESP32 microcontrollers: check whether running from idf.py or if CMAKE_TOOLCHAIN_FILE is
-#   set to utils/toolchain-esp32.cmake
-# - Unix-based OS: default if this file is the CMake source dir, otherwise check variable COMPILE_UNIX
-#   if CMake has been imported from another location, do not compile for Unix
-if (COMPILE_ESP OR ESP_PLATFORM)
-    message(STATUS "Vertices SDK examples: esp32")
-
-    # set project name for generated ESP32 elf/binary files
-    project(esp32_example)
-
-    # add_subdirectory(examples/esp32)
-    add_subdirectory(examples/esp32)
-elseif (COMPILE_UNIX)
+if (COMPILE_UNIX)
     message(STATUS "Vertices SDK examples: unix")
 
     set(CMAKE_MACOSX_RPATH 1)

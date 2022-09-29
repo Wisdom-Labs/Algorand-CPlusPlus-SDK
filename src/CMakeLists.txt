@@ -37,43 +37,7 @@ set(VERTICES_INC_DIRS
 
 string(LENGTH "${CMAKE_SOURCE_DIR}/" SOURCE_PATH_SIZE)
 
-if (ESP_PLATFORM)
-    # Add platform-specific http wrapper provided by Vertices
-
-    list(APPEND compile_options "-DBLOCKCHAIN_PROVIDER=${BLOCKCHAIN_PROVIDER}")
-    list(APPEND compile_options "-DSOURCE_PATH_SIZE=${SOURCE_PATH_SIZE}")
-
-    idf_component_register(SRCS ${VERTICES_SRC_FILES}
-            INCLUDE_DIRS ../include include
-            PRIV_INCLUDE_DIRS "${VERTICES_INC_DIRS}"
-            REQUIRES mbedtls esp_http_client
-            )
-
-elseif (COMPILE_ZEPHYR)
-
-    list(APPEND compile_options "-DBLOCKCHAIN_PROVIDER=${BLOCKCHAIN_PROVIDER}")
-    list(APPEND compile_options "-DSOURCE_PATH_SIZE=${SOURCE_PATH_SIZE}")
-
-    zephyr_interface_library_named(vertices)
-    zephyr_library()
-    zephyr_library_sources(${VERTICES_SRC_FILES})
-    zephyr_include_directories(
-            ${VERTICES_INC_DIRS}
-            ../include
-    )
-
-    zephyr_compile_options("-DBLOCKCHAIN_PROVIDER=${BLOCKCHAIN_PROVIDER}")
-    zephyr_compile_options("-DSOURCE_PATH_SIZE=${SOURCE_PATH_SIZE}")
-
-    zephyr_compile_options(-DMPACK_STDIO=0)
-    zephyr_compile_options(-DMPACK_STDLIB=0)
-
-    zephyr_library_link_libraries(vertices)
-    target_link_libraries(vertices INTERFACE zephyr_interface)
-
-    message(STATUS "🪁 Added Vertices library to Zephyr")
-
-elseif (COMPILE_UNIX)
+if (COMPILE_UNIX)
 
     add_definitions(-DBLOCKCHAIN_PROVIDER=${BLOCKCHAIN_PROVIDER})
     add_definitions("-DSOURCE_PATH_SIZE=${SOURCE_PATH_SIZE}")

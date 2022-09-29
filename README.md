@@ -13,8 +13,6 @@ We are doing our best to achieve those goals:
 - Can be easily imported into any project
 - Examples provided:
   - [Unix-based OSes](examples/unix)
-  - [ESP-IDF](examples/esp32)
-  - Zephyr (soon)
 - Connect to any Algorand API (local or remote provider)
 - Build with CMake and Make
 - Continuous Integration to maintain code quality:
