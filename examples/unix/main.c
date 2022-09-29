@@ -384,7 +384,7 @@ main(int argc, char *argv[])
             {
                 if (app_kv.values[i].type == VALUE_TYPE_INTEGER)
                 {
-                    LOG_INFO("%s: %lu", app_kv.values[i].name, app_kv.values[i].value_uint);
+                    LOG_INFO("%s: %llu", app_kv.values[i].name, app_kv.values[i].value_uint);
                 }
                 else if (app_kv.values[i].type == VALUE_TYPE_BYTESLICE)
                 {

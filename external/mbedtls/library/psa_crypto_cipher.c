@@ -260,6 +260,8 @@ static psa_status_t cipher_set_iv( mbedtls_psa_cipher_operation_t *operation,
                                        iv, iv_length ) ) );
 }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-but-set-parameter"
 /* Process input for which the algorithm is set to ECB mode. This requires
  * manual processing, since the PSA API is defined as being able to process
  * arbitrary-length calls to psa_cipher_update() with ECB mode, but the
@@ -347,6 +349,7 @@ static psa_status_t psa_cipher_update_ecb(
 exit:
     return( status );
 }
+#pragma clang diagnostic pop
 
 static psa_status_t cipher_update( mbedtls_psa_cipher_operation_t *operation,
                                    const uint8_t *input,
