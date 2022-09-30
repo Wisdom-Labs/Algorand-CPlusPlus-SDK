@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-set(PROJECT_NAME UNREAL-SDK)
+set(PROJECT_NAME Vertices-SDK)
 project(${PROJECT_NAME} C CXX)
 set(CMAKE_CXX_FLAGS "-std=c++20")
 set(CMAKE_C_FLAGS "-std=c11")
@@ -65,4 +65,3 @@ add_compile_options(
 
 # Add vertices library
 add_subdirectory(src)
-add_subdirectory(tests)
