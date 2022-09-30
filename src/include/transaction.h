@@ -9,34 +9,7 @@
 
 #include <vertices_errors.h>
 #include <vertices_types.h>
-
-#define header_xstr(s) str(s.h)
-#define str(s) #s
-
-#ifdef BLOCKCHAIN_PROVIDER
-
-// include Blockchain-specific types
-#include header_xstr(BLOCKCHAIN_PROVIDER)
-
-#else
-
-// Generic implementation
-
-typedef struct
-{
-    uint8_t receiver[ADDRESS_LENGTH]; ///< The address of the account that receives the amount.
-    uint64_t amount; ///< The total amount to be sent
-} payment_tx_t;
-
-typedef struct
-{
-    union
-    {
-        payment_tx_t payment_tx;
-    };
-} transaction_details_t;
-
-#endif
+#include <algorand.h>
 
 typedef struct
 {

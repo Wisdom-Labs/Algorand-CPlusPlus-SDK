@@ -7,7 +7,7 @@
 #ifndef VERTICES_SDK_LIB_SHA512256_H
 #define VERTICES_SDK_LIB_SHA512256_H
 
-#include <vertices_errors.h>
+#include "vertices_errors.h"
 
 #ifdef __cplusplus
 extern "C" {

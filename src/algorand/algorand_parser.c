@@ -7,7 +7,7 @@
 #include <mpack-reader.h>
 #include <vertices_log.h>
 #include <cJSON.h>
-#include <base64.h>
+#include "utils/base64.h"
 #include "parser.h"
 
 //#define DEBUG_PARSER // to enable maximum verbosity and make the parser fail on error
