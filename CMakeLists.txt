@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-set(PROJECT_NAME Vertices-SDK)
+set(PROJECT_NAME UNREAL-SDK)
 project(${PROJECT_NAME})
 
 # Set variable VERTICES_ROOT to absolute path of that file location
@@ -46,3 +46,4 @@ endif ()
 
 # Add vertices library
 add_subdirectory(src)
+add_subdirectory(tests)

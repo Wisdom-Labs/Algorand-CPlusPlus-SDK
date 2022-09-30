@@ -258,7 +258,7 @@ main(int argc, char *argv[])
 {
     ret_code_t err_code;
 
-    bool create_new = false;                // bug fixing convert false to tru at first.
+    bool create_new = true;                // bug fixing convert false to tru at first.
     tx_type_t run_tx = PAY_TX;
 
     int opt;
@@ -384,7 +384,7 @@ main(int argc, char *argv[])
             {
                 if (app_kv.values[i].type == VALUE_TYPE_INTEGER)
                 {
-                    LOG_INFO("%s: %llu", app_kv.values[i].name, app_kv.values[i].value_uint);
+                    LOG_INFO("%s: %llu", app_kv.values[i].name, (long long unsigned)app_kv.values[i].value_uint);
                 }
                 else if (app_kv.values[i].type == VALUE_TYPE_BYTESLICE)
                 {
