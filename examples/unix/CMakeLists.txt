@@ -1,8 +1,9 @@
 set(PROJECT_NAME unix_example)
-
+project(${PROJECT_NAME} C CXX)
+set (CMAKE_CXX_FLAGS "-std=c++11")
 set(SRC_FILES
-        main.c
-        vertices_ports/http_curl.c
+        main.cpp
+        vertices_ports/http_curl.cpp
         )
 
 set(INC_FOLDERS
@@ -33,7 +34,24 @@ else()
 endif()
 
 # lots of warnings and all warnings as errors
-add_compile_options(-pedantic -Wall -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wc++-compat -Wundef -Wswitch-default -Wconversion -Wno-missing-braces)
+add_compile_options(
+        -pedantic
+        -Wall
+        -Werror
+        -Wstrict-prototypes
+        -Wwrite-strings
+        -Wshadow
+        -Winit-self
+        -Wcast-align
+        -Wformat=2
+        -Wmissing-prototypes
+        -Wstrict-overflow=2
+        -Wc++-compat
+        -Wundef
+        -Wswitch-default
+        -Wconversion
+        -Wno-vla-extension
+        -Wno-missing-braces)
 
 # Find cURL
 find_package(CURL)

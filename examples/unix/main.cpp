@@ -7,10 +7,9 @@
 #include "vertices.h"
 #include <vertices_log.h>
 #include <unix_config.h>
-#include <string.h>
+#include <cstring>
 #include <sodium.h>
 #include <getopt.h>
-#include <stdbool.h>
 #include <base32.h>
 #include <base64.h>
 #include <sha512_256.h>
