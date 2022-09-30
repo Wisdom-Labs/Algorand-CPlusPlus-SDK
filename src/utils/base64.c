@@ -7,7 +7,7 @@
 #include "base64.h"
 
 #include <stdint.h>
-#include <vertices_errors.h>
+#include "vertices_errors.h"
 #include <string.h>
 
 // based on https://opensource.apple.com/source/QuickTimeStreamingServer/QuickTimeStreamingServer-452/CommonUtilitiesLib/base64.c
