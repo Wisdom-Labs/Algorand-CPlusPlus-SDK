@@ -10,7 +10,7 @@
 #include <stddef.h>
 #include <string.h>
 
-#include "base64.h"
+#include "utils/base64.h"
 #include "vertices_log.h"
 #include "vertices_errors.h"
 

@@ -9,8 +9,8 @@
 #include <transaction.h>
 #include <vertices_log.h>
 #include <string.h>
-#include <sha512_256.h>
-#include <base32.h>
+#include "utils/sha512_256.h"
+#include "utils/base32.h"
 #include "vertices.h"
 
 static ret_code_t

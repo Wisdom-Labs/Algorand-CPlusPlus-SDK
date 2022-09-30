@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include "base32.h"
+#include "utils/base32.h"
 
 ret_code_t
 b32_encode(const char *data, size_t length, char *encoded, size_t *output_size)

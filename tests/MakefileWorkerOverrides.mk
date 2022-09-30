@@ -2,7 +2,7 @@
 # The defaults are what CI uses
 #
 # For osx, the brew path will look something like /usr/local/Cellar/cpputest/3.8
-CPPUTEST_HOME ?= /home/ubuntu/cpputest
+CPPUTEST_HOME ?= /usr
 
 ifeq ($(DOCKER_RUN),1)
 TARGET_PLATFORM:=$(shell uname -m)-linux-gnu/

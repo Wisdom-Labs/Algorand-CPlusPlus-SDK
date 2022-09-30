@@ -1,21 +1,14 @@
 set(PROJECT_NAME unix_example)
-
+project(${PROJECT_NAME} C CXX)
+set (CMAKE_CXX_FLAGS "-std=c++20")
 set(SRC_FILES
-        main.c
-        vertices_ports/http_curl.c
+        main.cpp
+        vertices_ports/http_curl.cpp
         )
 
 set(INC_FOLDERS
         config
         )
-
-# check that BLOCKCHAIN_PROVIDER variable is set, default to `algorand`
-if(DEFINED ENV{BLOCKCHAIN_PROVIDER})
-    message(STATUS "Using blockchain: $ENV{BLOCKCHAIN_PROVIDER}")
-else()
-    set(ENV{BLOCKCHAIN_PROVIDER} algorand)
-    message(STATUS "Default blockchain: $ENV{BLOCKCHAIN_PROVIDER}")
-endif()
 
 import_libs()
 
@@ -33,7 +26,24 @@ else()
 endif()
 
 # lots of warnings and all warnings as errors
-add_compile_options(-pedantic -Wall -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wc++-compat -Wundef -Wswitch-default -Wconversion -Wno-missing-braces)
+add_compile_options(
+        -pedantic
+        -Wall
+        -Werror
+        -Wstrict-prototypes
+        -Wwrite-strings
+        -Wshadow
+        -Winit-self
+        -Wcast-align
+        -Wformat=2
+        -Wmissing-prototypes
+        -Wstrict-overflow=2
+        -Wc++-compat
+        -Wundef
+        -Wswitch-default
+        -Wconversion
+        -Wno-vla-extension
+        -Wno-missing-braces)
 
 # Find cURL
 find_package(CURL)

@@ -8,7 +8,7 @@
 #include "vertices_errors.h"
 #include "vertices_http.h"
 #include <transaction.h>
-#include <base64.h>
+#include "utils/base64.h"
 #include <parser.h>
 #include <string.h>
 #include "provider.h"
