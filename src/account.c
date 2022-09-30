@@ -7,7 +7,7 @@
 #include <string.h>
 #include <vertices_log.h>
 #include <provider.h>
-#include <base32.h>
+#include "utils/base32.h"
 #include "account.h"
 
 #define ACCOUNTS_MAXIMUM_COUNT  2

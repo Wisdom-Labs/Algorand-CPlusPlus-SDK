@@ -10,7 +10,7 @@
 #include <stddef.h>
 #include <string.h>
 
-#include "sha512_256.h"
+#include "utils/sha512_256.h"
 #include "vertices_log.h"
 #include "vertices_errors.h"
 

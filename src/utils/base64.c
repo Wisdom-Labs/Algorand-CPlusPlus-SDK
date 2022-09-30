@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include "base64.h"
+#include "utils/base64.h"
 
 #include <stdint.h>
 #include "vertices_errors.h"

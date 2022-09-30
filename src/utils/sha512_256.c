@@ -5,7 +5,7 @@
  */
 
 #include <string.h>
-#include "sha512_256.h"
+#include "utils/sha512_256.h"
 #include "mbedtls/sha512.h"
 
 ret_code_t

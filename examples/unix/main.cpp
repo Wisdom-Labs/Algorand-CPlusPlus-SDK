@@ -10,8 +10,8 @@
 #include <cstring>
 #include <sodium.h>
 #include <getopt.h>
-#include <base32.h>
-#include <base64.h>
+#include "utils/base32.h"
+#include "utils/base64.h"
 
 typedef enum {
     PAY_TX = 0,
