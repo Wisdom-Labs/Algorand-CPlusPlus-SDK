@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.5)
 set(PROJECT_NAME Vertices-SDK)
-project(${PROJECT_NAME})
+project(${PROJECT_NAME} C CXX)
+set(CMAKE_CXX_FLAGS "-std=c++20")
+set(CMAKE_C_FLAGS "-std=c11")
 
 # Set variable VERTICES_ROOT to absolute path of that file location
 get_filename_component(VERTICES_ROOT . ABSOLUTE)
@@ -18,9 +20,9 @@ set(ENV{BLOCKCHAIN_PROVIDER} algorand)
 
 # default behaviour is to compile Unix example if current CMake file is used as
 # project root CMake
-if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+if (CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
     set(COMPILE_UNIX ON)
-endif()
+endif ()
 
 if (COMPILE_UNIX)
     message(STATUS "Vertices SDK examples: unix")
@@ -32,7 +34,7 @@ if (COMPILE_UNIX)
     add_subdirectory(examples/unix)
     add_subdirectory(external/mbedtls)
     add_subdirectory(external/cJSON)
-else()
+else ()
     message(STATUS "Vertices SDK examples: generic")
 
     # build CJSON static lib insteado of default shared lib
@@ -43,6 +45,26 @@ else()
     add_subdirectory(external/mbedtls)
     add_subdirectory(external/cJSON)
 endif ()
+
+# lots of warnings and all warnings as errors
+add_compile_options(
+        -pedantic
+        -Wall
+        -Werror
+        -Wstrict-prototypes
+        -Wwrite-strings
+        -Wshadow
+        -Winit-self
+        -Wcast-align
+        -Wformat=2
+        -Wmissing-prototypes
+        -Wstrict-overflow=2
+        -Wc++-compat
+        -Wundef
+        -Wswitch-default
+        -Wconversion
+        -Wno-cast-align
+        -Wno-missing-braces)
 
 # Add vertices library
 add_subdirectory(src)
