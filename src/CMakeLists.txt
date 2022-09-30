@@ -57,7 +57,7 @@ if (COMPILE_UNIX)
             )
 
     target_link_libraries(vertices cjson mbedcrypto)
-    target_compile_options(vertices PRIVATE -pedantic -Wall -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wc++-compat -Wundef -Wconversion -Wno-missing-braces)
+    target_compile_options(vertices PRIVATE -pedantic -Wall -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wc++-compat -Wundef -Wconversion -Wno-missing-braces)
 
 else ()
     target_compile_options(mbedcrypto PRIVATE -DMBEDTLS_CONFIG_FILE=<${CMAKE_CURRENT_SOURCE_DIR}/include/mbedtls_config.h>)

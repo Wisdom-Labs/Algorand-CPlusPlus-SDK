@@ -29,7 +29,6 @@ endif()
 add_compile_options(
         -pedantic
         -Wall
-        -Werror
         -Wstrict-prototypes
         -Wwrite-strings
         -Wshadow
