@@ -1,6 +1,6 @@
 set(PROJECT_NAME unix_example)
 project(${PROJECT_NAME} C CXX)
-set (CMAKE_CXX_FLAGS "-std=c++20")
+set (CMAKE_CXX_FLAGS "-std=c++11")
 set(SRC_FILES
         main.cpp
         vertices_ports/http_curl.cpp

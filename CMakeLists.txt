@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 set(PROJECT_NAME Vertices-SDK)
 project(${PROJECT_NAME} C CXX)
-set(CMAKE_CXX_FLAGS "-std=c++20")
+set(CMAKE_CXX_FLAGS "-std=c++11")
 set(CMAKE_C_FLAGS "-std=c11")
 
 # Set variable VERTICES_ROOT to absolute path of that file location
