@@ -37,6 +37,7 @@ if (COMPILE_UNIX)
     target_include_directories(vertices
             PUBLIC
             "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+            "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/utils>"
             "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>"
             "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../external/cJSON>"
             "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../external/mbedtls/library>"

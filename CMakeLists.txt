@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.5)
 set(PROJECT_NAME Vertices-SDK)
 project(${PROJECT_NAME} C CXX)
-set(CMAKE_CXX_FLAGS "-std=c++11")
-set(CMAKE_C_FLAGS "-std=c11")
+#set(CMAKE_CXX_FLAGS "-std=c++11")
+#set(CMAKE_C_FLAGS "-std=c11")
 
 # Set variable VERTICES_ROOT to absolute path of that file location
 get_filename_component(VERTICES_ROOT . ABSOLUTE)
@@ -17,6 +17,7 @@ set(CMAKE_MODULE_PATH ${VERTICES_ROOT}/utils/)
 
 # default behaviour is to compile Unix example if current CMake file is used as
 # project root CMake
+
 if (CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
     set(COMPILE_UNIX ON)
 endif ()
