@@ -15,9 +15,6 @@ message(STATUS "💎 Loading targets")
 # Module path to find libs
 set(CMAKE_MODULE_PATH ${VERTICES_ROOT}/utils/)
 
-# Set blockchain
-set(ENV{BLOCKCHAIN_PROVIDER} algorand)
-
 # default behaviour is to compile Unix example if current CMake file is used as
 # project root CMake
 if (CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)

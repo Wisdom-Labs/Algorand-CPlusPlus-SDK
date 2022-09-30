@@ -10,14 +10,6 @@ set(INC_FOLDERS
         config
         )
 
-# check that BLOCKCHAIN_PROVIDER variable is set, default to `algorand`
-if(DEFINED ENV{BLOCKCHAIN_PROVIDER})
-    message(STATUS "Using blockchain: $ENV{BLOCKCHAIN_PROVIDER}")
-else()
-    set(ENV{BLOCKCHAIN_PROVIDER} algorand)
-    message(STATUS "Default blockchain: $ENV{BLOCKCHAIN_PROVIDER}")
-endif()
-
 import_libs()
 
 add_definitions(-DCONFIG_PATH="${CMAKE_CURRENT_SOURCE_DIR}/config/")
