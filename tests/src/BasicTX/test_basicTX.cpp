@@ -344,7 +344,7 @@ TEST(UnrealSDK, create_new_wallet) {
 }
 
 TEST(UnrealSDK, pay_transaction) {
-    create_new = false;
+    create_new = true;
     run_tx = PAY_TX;
 
     LOG_INFO("😎 Vertices SDK running on Unix-based OS");

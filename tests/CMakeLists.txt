@@ -97,5 +97,5 @@ include_directories(${CURL_INCLUDE_DIRS})
 include_directories(${INC_FOLDERS})
 
 add_subdirectory(src/BasicTX)
-add_subdirectory(src/AlgoProvider)
+add_subdirectory(src/Vertices)
 
