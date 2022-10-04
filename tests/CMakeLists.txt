@@ -98,4 +98,5 @@ include_directories(${INC_FOLDERS})
 
 add_subdirectory(src/BasicTX)
 add_subdirectory(src/Vertices)
+add_subdirectory(src/Account)
 
