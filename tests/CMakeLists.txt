@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
-set(TEST_PROJECT_NAME vertices_sdk_tests)
-project(${TEST_PROJECT_NAME} C CXX)
 
+project(VerticesTop C CXX)
 set(CPPUTEST_HOME /home/ubuntu/cpputest)
 get_filename_component(VERTICES_TEST_ROOT . ABSOLUTE)
 set(VERTICES_ROOT ${VERTICES_TEST_ROOT}/..)
@@ -9,13 +8,6 @@ add_definitions(-DVERTICES_ROOT="${VERTICES_ROOT}")
 
 # Module path to find libs
 set(CMAKE_MODULE_PATH ${VERTICES_ROOT}/utils/)
-
-set(TEST_SOURCES
-        src/test_basicTX.cpp
-        src/AllTests.cpp
-        fakes/fake_vertices_errors.c
-        vertices_ports/http_curl.c
-        )
 
 set(INC_FOLDERS
         config
@@ -95,7 +87,6 @@ add_subdirectory(../src ./bin/src EXCLUDE_FROM_ALL)
 
 # Take care of include directories
 include_directories(${CPPUTEST_INCLUDE_DIRS})
-message("I am here")
 message(${CPPUTEST_LIBRARIES})
 link_directories(${CPPUTEST_LIBRARIES})
 
@@ -104,5 +95,7 @@ find_package(CURL)
 include_directories(${CURL_INCLUDE_DIRS})
 
 include_directories(${INC_FOLDERS})
-add_executable(${TEST_PROJECT_NAME} ${TEST_SOURCES})
-target_link_libraries(${TEST_PROJECT_NAME} sodium curl vertices ${CPPUTEST_LDFLAGS})
+
+add_subdirectory(src/BasicTX)
+add_subdirectory(src/AlgoProvider)
+

@@ -250,4 +250,4 @@ vertices_new(vertex_t *config)
     m_vertices_evt_handler = config->vertices_evt_handler;
 
     return err_code;
-}
+ }

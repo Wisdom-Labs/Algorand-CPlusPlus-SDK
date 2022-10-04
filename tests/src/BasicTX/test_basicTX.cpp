@@ -11,7 +11,7 @@
 
 #include "vertices.h"
 #include <vertices_log.h>
-#include <unix_config.h>
+#include "unix_config.h"
 #include <string.h>
 #include <sodium.h>
 #include <getopt.h>
@@ -322,7 +322,7 @@ TEST(UnrealSDK, create_new_wallet) {
                 "🙄 Amount available on account is too low to pass a transaction, consider adding Algos");
         LOG_INFO("👉 Go to https://bank.testnet.algorand.network/, dispense Algos to: %s",
                  alice_account.vtc_account->public_b32);
-        LOG_INFO("😎 TTTThen wait for a few seconds for transaction to pass...");
+        LOG_INFO("😎 Then wait for a few seconds for transaction to pass...");
         // return
     }
 
@@ -396,7 +396,7 @@ TEST(UnrealSDK, pay_transaction) {
                 "🙄 Amount available on account is too low to pass a transaction, consider adding Algos");
         LOG_INFO("👉 Go to https://bank.testnet.algorand.network/, dispense Algos to: %s",
                  alice_account.vtc_account->public_b32);
-        LOG_INFO("😎 TTTThen wait for a few seconds for transaction to pass...");
+        LOG_INFO("😎 Then wait for a few seconds for transaction to pass...");
         // return
     }
 
