@@ -101,4 +101,5 @@ add_subdirectory(src/Vertices)
 add_subdirectory(src/Account)
 add_subdirectory(src/Base32)
 add_subdirectory(src/Base64)
+add_subdirectory(src/Sha512_256)
 
