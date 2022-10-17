@@ -15,6 +15,8 @@
 #include <vertices.h>
 #include <compilers.h>
 
+#define	htobe64(x)	((uint64_t)(x))
+
 const char *algorand_tx_types[] = {"pay", "keyreg", "acfg", "axfer", "afrz", "appl"};
 
 #define PENDING_TX_COUNT    4
