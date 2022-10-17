@@ -16,7 +16,7 @@
  */
 
 
-__WEAK ret_code_t
+ret_code_t
 http_init(const provider_info_t *provider,
           size_t (*response_payload_cb)(char *chunk,
                                         size_t chunk_size))
@@ -26,7 +26,7 @@ http_init(const provider_info_t *provider,
     return VTC_ERROR_NOT_FOUND;
 }
 
-__WEAK ret_code_t
+ret_code_t
 http_get(const provider_info_t *provider,
          const char *relative_path,
          const char *headers,
@@ -37,7 +37,7 @@ http_get(const provider_info_t *provider,
     return VTC_ERROR_NOT_FOUND;
 }
 
-__WEAK ret_code_t
+ret_code_t
 http_post(const provider_info_t *provider,
           const char *relative_path,
           char *headers,
@@ -50,7 +50,7 @@ http_post(const provider_info_t *provider,
     return VTC_ERROR_NOT_FOUND;
 }
 
-__WEAK void
+void
 http_close(void)
 {
 
