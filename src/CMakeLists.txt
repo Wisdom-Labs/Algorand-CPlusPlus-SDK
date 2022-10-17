@@ -18,6 +18,7 @@ set(VERTICES_SRC_FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/../external/mpack/src/mpack/mpack-expect.c
         ${CMAKE_CURRENT_SOURCE_DIR}/../external/mpack/src/mpack/mpack-node.c
         ${CMAKE_CURRENT_SOURCE_DIR}/../external/mpack/src/mpack/mpack-writer.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/../examples/unix/vertices_ports/http_curl.cpp
         )
 
 set(VERTICES_INC_DIRS
@@ -32,7 +33,7 @@ if (COMPILE_UNIX)
 
     add_definitions("-DSOURCE_PATH_SIZE=${SOURCE_PATH_SIZE}")
 
-    add_library(vertices STATIC ${VERTICES_SRC_FILES})
+    add_library(vertices SHARED ${VERTICES_SRC_FILES})
 
     target_include_directories(vertices
             PUBLIC
