@@ -22,7 +22,9 @@ app_error_fault_handler(__attribute__((unused)) uint32_t id,
               ((error_info_t *) info)->p_file_name,
               ((error_info_t *) info)->line_num);
     // software breakpoint
-    __builtin_trap();
+    // I got this error so remove this line.
+    // error LNK2019: unresolved external symbol __builtin_trap referenced in function app_error_fault_handler when Linking bin/vertices.dll with lib/vertices.lib
+    //__builtin_trap();
 }
 
 void

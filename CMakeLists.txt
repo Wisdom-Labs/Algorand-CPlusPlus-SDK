@@ -47,23 +47,25 @@ else ()
 endif ()
 
 # lots of warnings and all warnings as errors
-add_compile_options(
-        -pedantic
-        -Wall
-        -Wstrict-prototypes
-        -Wwrite-strings
-        -Wshadow
-        -Winit-self
-        -Wcast-align
-        -Wformat=2
-        -Wmissing-prototypes
-        -Wstrict-overflow=2
-        -Wc++-compat
-        -Wundef
-        -Wswitch-default
-        -Wconversion
-        -Wno-cast-align
-        -Wno-missing-braces)
+if(NOT MSVC)
+    add_compile_options(
+            -pedantic
+            -Wall
+            -Wstrict-prototypes
+            -Wwrite-strings
+            -Wshadow
+            -Winit-self
+            -Wcast-align
+            -Wformat=2
+            -Wmissing-prototypes
+            -Wstrict-overflow=2
+            -Wc++-compat
+            -Wundef
+            -Wswitch-default
+            -Wconversion
+            -Wno-cast-align
+            -Wno-missing-braces)
+endif()
 
 # Add vertices library
 add_subdirectory(src)

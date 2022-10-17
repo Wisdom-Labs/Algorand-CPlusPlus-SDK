@@ -5,7 +5,7 @@ set(VERTICES_SRC_FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/account.c
         ${CMAKE_CURRENT_SOURCE_DIR}/utils/base64.c
         ${CMAKE_CURRENT_SOURCE_DIR}/utils/base32.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/utils/http_weak.c
+#        ${CMAKE_CURRENT_SOURCE_DIR}/utils/http_weak.c
         ${CMAKE_CURRENT_SOURCE_DIR}/utils/sha512_256.c
         ${CMAKE_CURRENT_SOURCE_DIR}/vertices_errors.c
         ${CMAKE_CURRENT_SOURCE_DIR}/vertices.c
@@ -84,6 +84,7 @@ if (COMPILE_UNIX)
             find_package(CURL)
             include_directories(${CURL_INCLUDE_DIRS})
             target_link_libraries(vertices cjson mbedcrypto sodium curl)
+            target_compile_options(vertices PRIVATE -pedantic -Wall -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wc++-compat -Wundef -Wconversion -Wno-missing-braces)
         else()  # MacOS
 
         endif()

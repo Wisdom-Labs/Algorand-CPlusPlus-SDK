@@ -1,6 +1,8 @@
 set(PROJECT_NAME unix_example)
 project(${PROJECT_NAME} C CXX)
-set (CMAKE_CXX_FLAGS "-std=c++11")
+if (NOT MSVC)
+    set (CMAKE_CXX_FLAGS "-std=c++11")
+endif()
 set(SRC_FILES
         main.cpp
         vertices_ports/http_curl.cpp
@@ -26,23 +28,25 @@ else()
 endif()
 
 # lots of warnings and all warnings as errors
-add_compile_options(
-        -pedantic
-        -Wall
-        -Wstrict-prototypes
-        -Wwrite-strings
-        -Wshadow
-        -Winit-self
-        -Wcast-align
-        -Wformat=2
-        -Wmissing-prototypes
-        -Wstrict-overflow=2
-        -Wc++-compat
-        -Wundef
-        -Wswitch-default
-        -Wconversion
-        -Wno-vla-extension
-        -Wno-missing-braces)
+if(NOT MSVC)
+    add_compile_options(
+            -pedantic
+            -Wall
+            -Wstrict-prototypes
+            -Wwrite-strings
+            -Wshadow
+            -Winit-self
+            -Wcast-align
+            -Wformat=2
+            -Wmissing-prototypes
+            -Wstrict-overflow=2
+            -Wc++-compat
+            -Wundef
+            -Wswitch-default
+            -Wconversion
+            -Wno-vla-extension
+            -Wno-missing-braces)
+endif ()
 
 if(MSVC OR MSYS OR MINGW)
     # DLL ,  Link CURL & SODIUM on Windows
