@@ -44,13 +44,28 @@ add_compile_options(
         -Wno-vla-extension
         -Wno-missing-braces)
 
-# Find cURL
-find_package(CURL)
-include_directories(${CURL_INCLUDE_DIRS})
+if(MSVC OR MSYS OR MINGW)
+    # DLL ,  Link CURL & SODIUM on Windows
+    # please download & install sodium and curl and set environment variables
+    set(libcurl_INCLUDE_DIRS "C:/libcurl-7.85/include")
+    include_directories(${libcurl_INCLUDE_DIRS})
 
-# Import Vertices
-add_library(Vertices::vertices STATIC IMPORTED)
+    set(libsodium_INCLUDE_DIRS "C:/libsodium-1.0.17/include")
+    include_directories(${libsodium_INCLUDE_DIRS})
 
-include_directories(${INC_FOLDERS})
-add_executable(${PROJECT_NAME} ${SRC_FILES})
-target_link_libraries(${PROJECT_NAME} sodium curl vertices)
+    include_directories(${INC_FOLDERS})
+    add_executable(${PROJECT_NAME} ${SRC_FILES})
+    target_link_libraries(${PROJECT_NAME} C:/libsodium-1.0.17/lib/libsodium.dll.a C:/libcurl-7.85/lib/libcurl.dll.a vertices)
+elseif(UNIX AND NOT APPLE)
+    # Find cURL
+    find_package(CURL)
+    include_directories(${CURL_INCLUDE_DIRS})
+    include_directories(${INC_FOLDERS})
+    add_executable(${PROJECT_NAME} ${SRC_FILES})
+    target_link_libraries(${PROJECT_NAME} sodium curl vertices)
+else()  # MacOS
+
+endif()
+
+
+

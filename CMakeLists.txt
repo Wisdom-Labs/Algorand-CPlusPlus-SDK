@@ -12,6 +12,8 @@ include(utils/utils.cmake)
 
 message(STATUS "💎 Loading targets")
 
+# Set built target ex.  unix_example or vertices.
+set(BUILT_TARGET "vertices")
 # Module path to find libs
 set(CMAKE_MODULE_PATH ${VERTICES_ROOT}/utils/)
 

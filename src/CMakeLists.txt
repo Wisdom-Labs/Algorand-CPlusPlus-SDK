@@ -33,7 +33,12 @@ if (COMPILE_UNIX)
 
     add_definitions("-DSOURCE_PATH_SIZE=${SOURCE_PATH_SIZE}")
 
-    add_library(vertices SHARED ${VERTICES_SRC_FILES})
+    if( ${BUILT_TARGET} STREQUAL vertices )
+        add_library(vertices SHARED ${VERTICES_SRC_FILES})
+    else()
+        add_library(vertices STATIC ${VERTICES_SRC_FILES})
+    endif()
+
 
     target_include_directories(vertices
             PUBLIC
@@ -58,8 +63,28 @@ if (COMPILE_UNIX)
             INCLUDES DESTINATION include
             )
 
-    target_link_libraries(vertices cjson mbedcrypto)
-    target_compile_options(vertices PRIVATE -pedantic -Wall -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wc++-compat -Wundef -Wconversion -Wno-missing-braces)
+    if( ${BUILT_TARGET} STREQUAL vertices )
+        if(MSVC OR MSYS OR MINGW)
+            # Windows DLL ,  Link CURL & SODIUM to Vertices
+            set(libcurl_INCLUDE_DIRS "C:/libcurl-7.85/include")
+            include_directories(${libcurl_INCLUDE_DIRS})
+
+            set(libsodium_INCLUDE_DIRS "C:/libsodium-1.0.17/include")
+            include_directories(${libsodium_INCLUDE_DIRS})
+            # please download & install sodium and curl and set environment variables
+            target_link_libraries(vertices cjson mbedcrypto C:/libsodium-1.0.17/lib/libsodium.dll.a C:/libcurl-7.85/lib/libcurl.dll.a)
+        elseif(UNIX AND NOT APPLE)
+            # Find cURL
+            find_package(CURL)
+            include_directories(${CURL_INCLUDE_DIRS})
+            target_link_libraries(vertices cjson mbedcrypto sodium curl)
+        else()  # MacOS
+
+        endif()
+    else()
+        target_link_libraries(vertices cjson mbedcrypto)
+        target_compile_options(vertices PRIVATE -pedantic -Wall -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wc++-compat -Wundef -Wconversion -Wno-missing-braces)
+    endif()
 
 else ()
     target_compile_options(mbedcrypto PRIVATE -DMBEDTLS_CONFIG_FILE=<${CMAKE_CURRENT_SOURCE_DIR}/include/mbedtls_config.h>)
