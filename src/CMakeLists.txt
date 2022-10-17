@@ -19,7 +19,7 @@ set(VERTICES_SRC_FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/../external/mpack/src/mpack/mpack-node.c
         ${CMAKE_CURRENT_SOURCE_DIR}/../external/mpack/src/mpack/mpack-writer.c
         ${CMAKE_CURRENT_SOURCE_DIR}/../examples/unix/vertices_ports/http_curl.cpp
-        )
+        main.cpp)
 
 set(VERTICES_INC_DIRS
         "include"
