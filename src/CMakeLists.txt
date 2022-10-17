@@ -2,23 +2,23 @@
 message(STATUS "Vertices SDK location: ${CMAKE_CURRENT_SOURCE_DIR}")
 
 set(VERTICES_SRC_FILES
-        ${CMAKE_CURRENT_SOURCE_DIR}/account.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/utils/base64.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/utils/base32.c
-#        ${CMAKE_CURRENT_SOURCE_DIR}/utils/http_weak.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/utils/sha512_256.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/vertices_errors.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/vertices.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/algorand/algorand_parser.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/algorand/algorand_provider.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/algorand/algorand_transaction.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/../external/mpack/src/mpack/mpack-common.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/../external/mpack/src/mpack/mpack-reader.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/../external/mpack/src/mpack/mpack-platform.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/../external/mpack/src/mpack/mpack-expect.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/../external/mpack/src/mpack/mpack-node.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/../external/mpack/src/mpack/mpack-writer.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/../examples/unix/vertices_ports/http_curl.cpp
+#        ${CMAKE_CURRENT_SOURCE_DIR}/account.c
+#        ${CMAKE_CURRENT_SOURCE_DIR}/utils/base64.c
+#        ${CMAKE_CURRENT_SOURCE_DIR}/utils/base32.c
+##        ${CMAKE_CURRENT_SOURCE_DIR}/utils/http_weak.c
+#        ${CMAKE_CURRENT_SOURCE_DIR}/utils/sha512_256.c
+#        ${CMAKE_CURRENT_SOURCE_DIR}/vertices_errors.c
+#        ${CMAKE_CURRENT_SOURCE_DIR}/vertices.c
+#        ${CMAKE_CURRENT_SOURCE_DIR}/algorand/algorand_parser.c
+#        ${CMAKE_CURRENT_SOURCE_DIR}/algorand/algorand_provider.c
+#        ${CMAKE_CURRENT_SOURCE_DIR}/algorand/algorand_transaction.c
+#        ${CMAKE_CURRENT_SOURCE_DIR}/../external/mpack/src/mpack/mpack-common.c
+#        ${CMAKE_CURRENT_SOURCE_DIR}/../external/mpack/src/mpack/mpack-reader.c
+#        ${CMAKE_CURRENT_SOURCE_DIR}/../external/mpack/src/mpack/mpack-platform.c
+#        ${CMAKE_CURRENT_SOURCE_DIR}/../external/mpack/src/mpack/mpack-expect.c
+#        ${CMAKE_CURRENT_SOURCE_DIR}/../external/mpack/src/mpack/mpack-node.c
+#        ${CMAKE_CURRENT_SOURCE_DIR}/../external/mpack/src/mpack/mpack-writer.c
+#        ${CMAKE_CURRENT_SOURCE_DIR}/../examples/unix/vertices_ports/http_curl.cpp
         main.cpp)
 
 set(VERTICES_INC_DIRS
@@ -45,6 +45,21 @@ if (COMPILE_UNIX)
             LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
             RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
             )
+
+    set( install_script "../utils/scripts/install.cmake" )
+    add_custom_command(TARGET vertices  POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_directory
+            ${CMAKE_BINARY_DIR}/bin
+            ${CMAKE_BINARY_DIR}/../../UnrealAlgorandPlugin/Plugins/Algorand/Binaries/ThirdParty/AlgorandLibrary/Win64)
+
+    add_custom_command(TARGET vertices  POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_directory
+            ${CMAKE_BINARY_DIR}/lib
+            ${CMAKE_BINARY_DIR}/../../UnrealAlgorandPlugin/Plugins/Algorand/Source/ThirdParty/AlgorandLibrary/x64/Release
+            COMMAND ${CMAKE_COMMAND} -E copy_directory
+            ${CMAKE_BINARY_DIR}/bin
+            ${CMAKE_BINARY_DIR}/../../UnrealAlgorandPlugin/Plugins/Algorand/Source/ThirdParty/AlgorandLibrary/x64/Release)
+
 
     target_include_directories(vertices
             PUBLIC
