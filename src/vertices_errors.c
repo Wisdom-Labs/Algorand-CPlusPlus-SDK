@@ -13,7 +13,8 @@
  * Function is implemented as weak so that it can be overwritten by custom application error handler
  * when needed.
  */
-__WEAK void
+// __WEAK
+void
 app_error_fault_handler(uint32_t id, uint32_t pc, long info)
 {
     UNUSED_PARAMETER(id);
@@ -24,7 +25,7 @@ app_error_fault_handler(uint32_t id, uint32_t pc, long info)
               ((error_info_t *) info)->p_file_name,
               ((error_info_t *) info)->line_num);
     // software breakpoint
-    __builtin_trap();
+    // __builtin_trap();
 }
 
 void
