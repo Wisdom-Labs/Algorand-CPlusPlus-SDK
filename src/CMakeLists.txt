@@ -39,6 +39,12 @@ if (COMPILE_UNIX)
         add_library(vertices STATIC ${VERTICES_SRC_FILES})
     endif()
 
+    set_target_properties( vertices
+            PROPERTIES
+            ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+            LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+            RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+            )
 
     target_include_directories(vertices
             PUBLIC
