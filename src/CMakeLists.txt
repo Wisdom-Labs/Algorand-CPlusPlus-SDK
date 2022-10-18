@@ -2,23 +2,22 @@
 message(STATUS "Vertices SDK location: ${CMAKE_CURRENT_SOURCE_DIR}")
 
 set(VERTICES_SRC_FILES
-#        ${CMAKE_CURRENT_SOURCE_DIR}/account.c
-#        ${CMAKE_CURRENT_SOURCE_DIR}/utils/base64.c
-#        ${CMAKE_CURRENT_SOURCE_DIR}/utils/base32.c
-##        ${CMAKE_CURRENT_SOURCE_DIR}/utils/http_weak.c
-#        ${CMAKE_CURRENT_SOURCE_DIR}/utils/sha512_256.c
-#        ${CMAKE_CURRENT_SOURCE_DIR}/vertices_errors.c
-#        ${CMAKE_CURRENT_SOURCE_DIR}/vertices.c
-#        ${CMAKE_CURRENT_SOURCE_DIR}/algorand/algorand_parser.c
-#        ${CMAKE_CURRENT_SOURCE_DIR}/algorand/algorand_provider.c
-#        ${CMAKE_CURRENT_SOURCE_DIR}/algorand/algorand_transaction.c
-#        ${CMAKE_CURRENT_SOURCE_DIR}/../external/mpack/src/mpack/mpack-common.c
-#        ${CMAKE_CURRENT_SOURCE_DIR}/../external/mpack/src/mpack/mpack-reader.c
-#        ${CMAKE_CURRENT_SOURCE_DIR}/../external/mpack/src/mpack/mpack-platform.c
-#        ${CMAKE_CURRENT_SOURCE_DIR}/../external/mpack/src/mpack/mpack-expect.c
-#        ${CMAKE_CURRENT_SOURCE_DIR}/../external/mpack/src/mpack/mpack-node.c
-#        ${CMAKE_CURRENT_SOURCE_DIR}/../external/mpack/src/mpack/mpack-writer.c
-#        ${CMAKE_CURRENT_SOURCE_DIR}/../examples/unix/vertices_ports/http_curl.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/account.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/utils/base64.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/utils/base32.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/utils/http_weak.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/utils/sha512_256.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/vertices_errors.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/vertices.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/algorand/algorand_parser.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/algorand/algorand_provider.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/algorand/algorand_transaction.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/../external/mpack/src/mpack/mpack-common.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/../external/mpack/src/mpack/mpack-reader.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/../external/mpack/src/mpack/mpack-platform.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/../external/mpack/src/mpack/mpack-expect.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/../external/mpack/src/mpack/mpack-node.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/../external/mpack/src/mpack/mpack-writer.c
         main.cpp)
 
 set(VERTICES_INC_DIRS
@@ -46,13 +45,11 @@ if (COMPILE_UNIX)
             RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
             )
 
-    set( install_script "../utils/scripts/install.cmake" )
+    #copy vertices library to unreal plugin
     add_custom_command(TARGET vertices  POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_directory
             ${CMAKE_BINARY_DIR}/bin
-            ${CMAKE_BINARY_DIR}/../../UnrealAlgorandPlugin/Plugins/Algorand/Binaries/ThirdParty/AlgorandLibrary/Win64)
-
-    add_custom_command(TARGET vertices  POST_BUILD
+            ${CMAKE_BINARY_DIR}/../../UnrealAlgorandPlugin/Plugins/Algorand/Binaries/ThirdParty/AlgorandLibrary/Win64
             COMMAND ${CMAKE_COMMAND} -E copy_directory
             ${CMAKE_BINARY_DIR}/lib
             ${CMAKE_BINARY_DIR}/../../UnrealAlgorandPlugin/Plugins/Algorand/Source/ThirdParty/AlgorandLibrary/x64/Release
@@ -60,6 +57,17 @@ if (COMPILE_UNIX)
             ${CMAKE_BINARY_DIR}/bin
             ${CMAKE_BINARY_DIR}/../../UnrealAlgorandPlugin/Plugins/Algorand/Source/ThirdParty/AlgorandLibrary/x64/Release)
 
+    # copy cjson library to unreal plugin
+    add_custom_command(TARGET vertices  POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy
+            ${CMAKE_BINARY_DIR}/external/cJSON/cjson.dll
+            ${CMAKE_BINARY_DIR}/../../UnrealAlgorandPlugin/Plugins/Algorand/Binaries/ThirdParty/AlgorandLibrary/Win64
+            COMMAND ${CMAKE_COMMAND} -E copy
+            ${CMAKE_BINARY_DIR}/external/cJSON/cjson.dll
+            ${CMAKE_BINARY_DIR}/../../UnrealAlgorandPlugin/Plugins/Algorand/Source/ThirdParty/AlgorandLibrary/x64/Release
+            COMMAND ${CMAKE_COMMAND} -E copy
+            ${CMAKE_BINARY_DIR}/external/cJSON/cjson.lib
+            ${CMAKE_BINARY_DIR}/../../UnrealAlgorandPlugin/Plugins/Algorand/Source/ThirdParty/AlgorandLibrary/x64/Release)
 
     target_include_directories(vertices
             PUBLIC
@@ -86,19 +94,9 @@ if (COMPILE_UNIX)
 
     if( ${BUILT_TARGET} STREQUAL vertices )
         if(MSVC OR MSYS OR MINGW)
-            # Windows DLL ,  Link CURL & SODIUM to Vertices
-            set(libcurl_INCLUDE_DIRS "C:/libcurl-7.85/include")
-            include_directories(${libcurl_INCLUDE_DIRS})
-
-            set(libsodium_INCLUDE_DIRS "C:/libsodium-1.0.17/include")
-            include_directories(${libsodium_INCLUDE_DIRS})
-            # please download & install sodium and curl and set environment variables
-            target_link_libraries(vertices cjson mbedcrypto C:/libsodium-1.0.17/lib/libsodium.dll.a C:/libcurl-7.85/lib/libcurl.dll.a)
+            target_link_libraries(vertices cjson mbedcrypto )
         elseif(UNIX AND NOT APPLE)
-            # Find cURL
-            find_package(CURL)
-            include_directories(${CURL_INCLUDE_DIRS})
-            target_link_libraries(vertices cjson mbedcrypto sodium curl)
+            target_link_libraries(vertices cjson mbedcrypto)
             target_compile_options(vertices PRIVATE -pedantic -Wall -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wc++-compat -Wundef -Wconversion -Wno-missing-braces)
         else()  # MacOS
 
