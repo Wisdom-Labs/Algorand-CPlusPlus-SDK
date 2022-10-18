@@ -13,6 +13,14 @@
 #include "utils/base32.h"
 #include "vertices.h"
 
+#if defined _WIN32 || defined _WIN64
+#define VERTICES_EXPORT __declspec(dllexport)
+#endif
+
+#ifndef VERTICES_EXPORT
+#define VERTICES_EXPORT
+#endif
+
 static ret_code_t
 (*m_vertices_evt_handler)(vtc_evt_t *evt) = NULL;
 
@@ -33,7 +41,7 @@ static vtc_events_buf_t m_events_queue = {0};
 /// \return
 /// * \c VTC_SUCCESS when \c version has been filled with node info
 /// * \c VTC_ERROR_OFFLINE when node cannot be reached to get info. Version could still be filled with information from a previous call.
-ret_code_t
+VERTICES_EXPORT ret_code_t
 vertices_version(provider_version_t *version)
 {
     return provider_version_get(version);
@@ -43,19 +51,19 @@ vertices_version(provider_version_t *version)
 /// \return
 /// * \c VTC_SUCCESS when API can be reached
 /// * \c VTC_ERROR_HTTP_BASE when an error occurs
-ret_code_t
+VERTICES_EXPORT ret_code_t
 vertices_ping()
 {
     return provider_ping();
 }
 
-ret_code_t
+VERTICES_EXPORT ret_code_t
 vertices_account_new_from_b32(char *public_b32, account_info_t **account)
 {
     return account_new(public_b32, account);
 }
 
-ret_code_t
+VERTICES_EXPORT ret_code_t
 vertices_account_new_from_bin(char *public_key, account_info_t **account)
 {
     VTC_ASSERT_BOOL(public_key != 0);
@@ -87,37 +95,37 @@ vertices_account_new_from_bin(char *public_key, account_info_t **account)
     return account_new(public_b32, account);
 }
 
-ret_code_t
+VERTICES_EXPORT ret_code_t
 vertices_account_free(account_info_t *account)
 {
     return account_free(account);
 }
 
-ret_code_t
+VERTICES_EXPORT ret_code_t
 vertices_account_update(account_info_t *account)
 {
     return account_update(account);
 }
 
-ret_code_t
+VERTICES_EXPORT ret_code_t
 vertices_transaction_pay_new(account_info_t *account, char *receiver, uint64_t amount, void *params)
 {
     return transaction_pay(account, receiver, amount, params);
 }
 
-ret_code_t
+VERTICES_EXPORT ret_code_t
 vertices_transaction_app_call(account_info_t *account, uint64_t app_id, void *params)
 {
     return transaction_appl(account, app_id, params);
 }
 
-ret_code_t
+VERTICES_EXPORT ret_code_t
 vertices_application_get(uint64_t app_id, app_values_t * global_states)
 {
     return provider_application_info_get(app_id, global_states);
 }
 
-ret_code_t
+VERTICES_EXPORT ret_code_t
 vertices_event_tx_get(size_t bufid, signed_transaction_t **tx)
 {
     return transaction_get(bufid, tx);
@@ -129,7 +137,7 @@ event_queue_size(void)
     return (m_events_queue.wr_index - m_events_queue.rd_index) & (VTC_EVENTS_COUNT - 1);
 }
 
-ret_code_t
+VERTICES_EXPORT ret_code_t
 vertices_event_schedule(vtc_evt_t *evt)
 {
     size_t next = (m_events_queue.wr_index + 1) % VTC_EVENTS_COUNT;
@@ -146,7 +154,7 @@ vertices_event_schedule(vtc_evt_t *evt)
     return VTC_SUCCESS;
 }
 
-ret_code_t
+VERTICES_EXPORT ret_code_t
 vertices_event_process(size_t * queue_size)
 {
     ret_code_t err_code = VTC_SUCCESS;
@@ -230,7 +238,7 @@ vertices_event_process(size_t * queue_size)
     return err_code;
 }
 
-ret_code_t
+VERTICES_EXPORT ret_code_t
 vertices_new(vertex_t *config)
 {
     ret_code_t err_code;
