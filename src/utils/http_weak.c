@@ -49,7 +49,7 @@ HTTP_WEAK_EXPORT ret_code_t set_http_post(ret_code_t (*http_post_handler)(const 
     return VTC_SUCCESS;
 }
 
-HTTP_WEAK_EXPORT ret_code_t set_http_close(ret_code_t (*http_close_handler)()) {
+HTTP_WEAK_EXPORT ret_code_t set_http_close(void (*http_close_handler)(void)) {
     m_http_close_handler = http_close_handler;
     return VTC_SUCCESS;
 }
