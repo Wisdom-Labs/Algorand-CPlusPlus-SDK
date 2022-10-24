@@ -28,22 +28,24 @@ set(VERTICES_INC_DIRS
 
 string(LENGTH "${CMAKE_SOURCE_DIR}/" SOURCE_PATH_SIZE)
 
-if (COMPILE_UNIX)
 
-    add_definitions("-DSOURCE_PATH_SIZE=${SOURCE_PATH_SIZE}")
 
-    if( ${BUILT_TARGET} STREQUAL vertices )
-        add_library(vertices SHARED ${VERTICES_SRC_FILES})
-    else()
-        add_library(vertices STATIC ${VERTICES_SRC_FILES})
-    endif()
+add_definitions("-DSOURCE_PATH_SIZE=${SOURCE_PATH_SIZE}")
 
-    set_target_properties( vertices
-            PROPERTIES
-            ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-            LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-            RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
-            )
+if( DEFINED LIB_TYPE )
+    add_library(vertices ${LIB_TYPE} ${VERTICES_SRC_FILES})
+else()
+    add_library(vertices STATIC ${VERTICES_SRC_FILES})
+endif()
+
+set_target_properties( vertices
+        PROPERTIES
+        ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+        LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+        )
+
+if( MSVC )
 
     #copy vertices library to unreal plugin
     add_custom_command(TARGET vertices  POST_BUILD
@@ -68,49 +70,37 @@ if (COMPILE_UNIX)
             COMMAND ${CMAKE_COMMAND} -E copy
             ${CMAKE_BINARY_DIR}/external/cJSON/cjson.lib
             ${CMAKE_BINARY_DIR}/../../UnrealAlgorandPlugin/Plugins/Algorand/Source/ThirdParty/AlgorandLibrary/x64/Release)
+endif()
 
-    target_include_directories(vertices
-            PUBLIC
-            "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
-            "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/utils>"
-            "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>"
-            "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../external/cJSON>"
-            "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../external/mbedtls/library>"
-            "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../external/ed25519>"
-            "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../external/mpack/src/mpack>"
-            "$<INSTALL_INTERFACE:../include>"
-            )
+target_include_directories(vertices
+        PUBLIC
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/utils>"
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>"
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../external/cJSON>"
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../external/mbedtls/library>"
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../external/ed25519>"
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../external/mpack/src/mpack>"
+        "$<INSTALL_INTERFACE:../include>"
+        )
 
-    # public header files
-    install(FILES ../include/vertices.h ../include/vertices_errors.h ../include/vertices_types.h ../include/vertices_http.h DESTINATION include)
+# public header files
+install(FILES ../include/vertices.h ../include/vertices_errors.h ../include/vertices_types.h ../include/vertices_http.h DESTINATION include)
 
-    install(TARGETS vertices
-            EXPORT verticesTargets
-            LIBRARY DESTINATION lib
-            ARCHIVE DESTINATION lib
-            RUNTIME DESTINATION bin
-            INCLUDES DESTINATION include
-            )
+install(TARGETS vertices
+        EXPORT verticesTargets
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib
+        RUNTIME DESTINATION bin
+        INCLUDES DESTINATION include
+        )
 
-    if( ${BUILT_TARGET} STREQUAL vertices )
-        if(MSVC OR MSYS OR MINGW)
-            target_link_libraries(vertices cjson mbedcrypto )
-        elseif(UNIX AND NOT APPLE)
-            target_link_libraries(vertices cjson mbedcrypto)
-            target_compile_options(vertices PRIVATE -pedantic -Wall -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wc++-compat -Wundef -Wconversion -Wno-missing-braces)
-        else()  # MacOS
 
-        endif()
-    else()
-        target_link_libraries(vertices cjson mbedcrypto)
-        target_compile_options(vertices PRIVATE -pedantic -Wall -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wc++-compat -Wundef -Wconversion -Wno-missing-braces)
-    endif()
-
-else ()
-    target_compile_options(mbedcrypto PRIVATE -DMBEDTLS_CONFIG_FILE=<${CMAKE_CURRENT_SOURCE_DIR}/include/mbedtls_config.h>)
-
-    add_library(vertices STATIC ${VERTICES_SRC_FILES})
-    target_include_directories(vertices PUBLIC ../include PRIVATE ${VERTICES_INC_DIRS})
-
+if(MSVC OR MSYS OR MINGW)
+    target_link_libraries(vertices cjson mbedcrypto )
+elseif(UNIX AND NOT APPLE)
     target_link_libraries(vertices cjson mbedcrypto)
-endif ()
+#        target_compile_options(vertices PRIVATE -pedantic -Wall -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wc++-compat -Wundef -Wconversion -Wno-missing-braces)
+else()  # MacOS
+
+endif()
