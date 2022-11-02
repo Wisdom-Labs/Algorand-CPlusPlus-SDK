@@ -235,7 +235,7 @@ int
 main(int argc, char *argv[]) {
     ret_code_t err_code;
 
-    bool create_new = true;                // bug fixing convert false to tru at first.
+    bool create_new = false;                // bug fixing convert false to tru at first.
     tx_type_t run_tx = PAY_TX;
 
     int opt;
@@ -318,7 +318,7 @@ main(int argc, char *argv[]) {
         LOG_INFO("👉 Go to https://bank.testnet.algorand.network/, dispense Algos to: %s",
                  alice_account.vtc_account->public_b32);
         LOG_INFO("😎 Then wait for a few seconds for transaction to pass...");
-        return 0;
+/*        return 0;*/
     }
 
     switch (run_tx) {
@@ -364,12 +364,21 @@ main(int argc, char *argv[]) {
             LOG_ERROR("Unknown action to run");
     }
 
+    unsigned char *txID;
+    txID = new unsigned char[TRANSACTION_HASH_STR_MAX_LENGTH];
     // processing
     size_t queue_size = 1;
     while (queue_size && err_code == VTC_SUCCESS) {
-        err_code = vertices_event_process(&queue_size);
+        err_code = vertices_event_process(&queue_size, txID);
         VTC_ASSERT(err_code);
     }
+
+    if(err_code == VTC_SUCCESS)
+    {
+        LOG_INFO("👉 Haha This is transaction ID: %s",txID);
+    }
+
+    free(txID);
 
     // delete the created accounts from the Vertices wallet
     err_code = vertices_account_free(alice_account.vtc_account);
