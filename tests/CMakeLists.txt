@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
 project(vertices_sdk_tests C CXX)
-set(CPPUTEST_HOME /home/ubuntu/cpputest)
 get_filename_component(VERTICES_TEST_ROOT . ABSOLUTE)
 set(VERTICES_ROOT ${VERTICES_TEST_ROOT}/..)
 add_definitions(-DVERTICES_ROOT="${VERTICES_ROOT}")
