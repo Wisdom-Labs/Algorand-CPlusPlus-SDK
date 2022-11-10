@@ -10,6 +10,14 @@
 #include "vertices_errors.h"
 #include <stdio.h>
 
+#if defined _WIN32 || defined _WIN64
+#define BASE64_IMPORT __declspec(dllimport)
+#elif defined __linux__
+#define BASE64_IMPORT __attribute__((visibility("default")))
+#else
+#define BASE64_IMPORT
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -30,7 +38,7 @@ extern "C" {
 /// \return error code:
 ///  - VTC_ERROR_NO_MEM if buffer not large enough to encode the input binary
 ///  - VTC_SUCCESS on success
-ret_code_t
+BASE64_IMPORT ret_code_t
 b64_encode(const char *input, size_t input_size, char *encoded_data, size_t *output_size);
 
 /// Decode base-64 string into binary buffer. `output_size` must be set to the `decoded_data` buffer size.
@@ -42,7 +50,7 @@ b64_encode(const char *input, size_t input_size, char *encoded_data, size_t *out
 /// \return error code:
 ///  - VTC_ERROR_NO_MEM if buffer not large enough to encode the input binary
 ///  - VTC_SUCCESS on success
-ret_code_t
+BASE64_IMPORT ret_code_t
 b64_decode(const char *input_data,
            size_t input_length,
            char *decoded_data,

@@ -1,5 +1,6 @@
 gstbuild
 cmake-build-*
+tests/config/public_b32.txt
 
 # custom_config contains private data
 private_config.h

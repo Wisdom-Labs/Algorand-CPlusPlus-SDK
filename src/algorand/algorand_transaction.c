@@ -14,6 +14,9 @@
 #include <vertices_log.h>
 #include <vertices.h>
 #include <compilers.h>
+#include <stdlib.h>
+
+#define	htobe64(x)	((uint64_t)(x))
 
 const char *algorand_tx_types[] = {"pay", "keyreg", "acfg", "axfer", "afrz", "appl"};
 
@@ -143,7 +146,14 @@ encode_tx(transaction_t *tx)
                     uint64_t value = tx->details->tx.appl.key_values->values[i].value_uint;
 
                     // convert to big endian
-                    value = htobe64(value);
+/*#ifdef _WIN64 || _WIN32
+
+                    value = _byteswap_uint64(value);
+#else*/
+                    /*value = htobe64(value);*/
+                    value = bswap_64(value);
+
+/*#endif*/
 
                     mpack_write_bin(&writer,
                                     (const char *) &value,

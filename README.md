@@ -1,11 +1,11 @@
 # unreal-sdk-algorand
 This repo is providing unreal C++ sdk on algorand chain.
 =======
-# 💎 Vertices SDK
+# 💎 Unreal Algorand SDK
 
 ## 📑 Specifications
 
-The Vertices SDK provides developers with an easy way for devices to interact with Blockchains.
+The Unreal Algorand SDK provides developers with an easy way for devices to interact with Algorand chain.
 
 We are doing our best to achieve those goals:
 
@@ -13,16 +13,18 @@ We are doing our best to achieve those goals:
 - Can be easily imported into any project
 - Examples provided:
   - [Unix-based OSes](examples/unix)
+  - Windows (``not completed``)
 - Connect to any Algorand API (local or remote provider)
 - Build with CMake and Make
 - Continuous Integration to maintain code quality:
-  - Build static library for several targets
+  - Build static and shared library for several targets
   - Unit-Testing
 
-At Vertices Network, we want to free your mind from the hassle of a safe design. Here are other projects we are working on:
+At this sdk, there are some todo list to add new features:
 
-- Secure Element support for future and more secure designs
-- Encrypted Flash for current designs
+- some bugs exists when compiling on some toolchains.  (Windows, Linux and Mac OS)
+- Update some actions for building tx and requesting api , which can integrate with unreal plugin easily. 
+- add new functions to create wallet provider.
 
 > ⚠️  IMPORTANT
 > - The current version of the SDK is still *very early*.
@@ -43,14 +45,14 @@ At Vertices Network, we want to free your mind from the hassle of a safe design.
 ├── inc                 # public include directory: you'll need those files to use the library
 │   ├── vertices.h      # for example, `vertices.h`
 │   └── ...
-├── lib                 # 
-│   ├── inc             # "private" header files, used within the library
+├── src                 # 
+│   ├── include         # "private" header files, used within the library
 │   ├── algorand        # implementation of Vertices with Algorand. The Algorand provider is the first implemented.
-│   ├── http            # HTTP wrappers functions, GET, POST... several implementations available for several stacks (libcurl, ESP-IDF...)
 │   ├── CMakeLists.txt  # CMake of the Vertices SDK, exports a package to be imported in your project, see examples' CMakeLists
 │   └── ...             # source files
-├── mdk                 # the SDK is running on several architecture, those files provide some compiler abstraction
-│   └── compilers.h
+├── tests               # 
+│   ├── src             # test sources is stored on this folder.
+│   └── ...             
 └── utils               # tools to make things easier, clearer, smarter :) 
     └── utils.cmake
 ```
@@ -68,10 +70,6 @@ git clone --recurse-submodules <url> [path]
 git submodule add <url> [path]
 ```
 
-Checkout [the documentation to get started](https://docs.vertices.network/vertices-sdk/quickstart).
-
-🔜 We might also provide a Docker container once we have set up CI/CD.
-
 
 ### Configuration
 
@@ -79,7 +77,7 @@ A config file provides an easy way to configure the SDK: [`include/vertices_conf
 
 ### Compilation
 
-CMake is currently used to build the library and examples (GNU Make is on the roadmap).
+CMake is currently used to build the library and examples (GNU Make and Visual Studio Make is on the roadmap).
 
 #### CMake
 
@@ -104,7 +102,7 @@ make unix_example
 
 👉 More to come about how to import the package into your build system.
 
-> 💡 Vertices is providing [examples](examples/) with various major SDKs, such as the ESP-IDF for Espressif microcontrollers. You can probably copy-paste our source code into your project 🙂.
+> 💡 This Algorand SDK is providing [examples](examples/) with various major SDKs. You can probably copy-paste our source code into your project 🙂.
 
 ### Examples
 
@@ -120,16 +118,10 @@ Make sure you have `cpputest` installed:
 From [`/tests`](/tests) you will be able to launch the unique command to run all the tests:
 
 ```shell
-make
+make all
 ```
 
 Checkout the [Readme](/tests/README.md) for more information.
 
 ## 🙌 Contributing
 
-🤗 We gratefully accept bug reports and contributions from the community.
-
-1.  Check for open issues or [start a discussion](https://discord.com/invite/2bTuWg5gGE) around a feature idea or a bug.
-2.  Fork the repository on GitHub to start making your changes. As a general rule, you should use the "development" branch as a basis.
-3.  Write a test which shows that the bug was fixed or that the feature works as expected.
-4.  Send a pull request and bug us until it gets merged and published. Contributions may need some modifications, so work with us to get your change accepted!

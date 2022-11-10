@@ -4,16 +4,24 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+#include "CppUTest/MemoryLeakDetectorMallocMacros.h"
+#include "CppUTest/MemoryLeakDetectorNewMacros.h"
+#include "CppUTest/TestHarness.h"
+#include "CppUTestExt/MockSupport.h"
+
 #include "vertices.h"
 #include <vertices_log.h>
-#include <unix_config.h>
-#include <cstring>
+#include "unix_config.h"
+#include <string.h>
 #include <sodium.h>
 #include <getopt.h>
-#include "utils/base32.h"
-#include "utils/base64.h"
+#include <stdbool.h>
+#include <base32.h>
+#include <base64.h>
+#include <sha512_256.h>
 
-typedef enum {
+typedef enum
+{
     PAY_TX = 0,
     APP_CALL_TX
 } tx_type_t;
@@ -27,15 +35,16 @@ static provider_info_t providers =
 /// We store anything related to the account into the below structure
 /// The private key is used outside of the Vertices library:
 ///    you don't have to pass the private key to the SDK as signing is done outside
-typedef struct {
+typedef struct
+{
     unsigned char private_key[ADDRESS_LENGTH];  //!< 32-bytes private key
     account_info_t *vtc_account;               //!< pointer to Vertices account data
 } account_t;
 
 // Alice's account is used to send data, keys will be retrived from config/key_files.txt
-static account_t alice_account = {.private_key = {0}, .vtc_account = nullptr};
+static account_t alice_account = {.private_key = {0}, .vtc_account = NULL};
 // Bob is receiving the money 😎
-static account_t bob_account = {.private_key = {0}, .vtc_account = nullptr};
+static account_t bob_account = {.private_key = {0}, .vtc_account = NULL};
 
 static vertex_t m_vertex = {
         .provider = &providers,
@@ -43,14 +52,18 @@ static vertex_t m_vertex = {
 };
 
 static ret_code_t
-vertices_evt_handler(vtc_evt_t *evt) {
+vertices_evt_handler(vtc_evt_t *evt)
+{
     ret_code_t err_code = VTC_SUCCESS;
 
-    switch (evt->type) {
-        case VTC_EVT_TX_READY_TO_SIGN: {
-            signed_transaction_t *tx = nullptr;
+    switch (evt->type)
+    {
+        case VTC_EVT_TX_READY_TO_SIGN:
+        {
+            signed_transaction_t *tx = NULL;
             err_code = vertices_event_tx_get(evt->bufid, &tx);
-            if (err_code == VTC_SUCCESS) {
+            if (err_code == VTC_SUCCESS)
+            {
                 LOG_DEBUG("About to sign tx: data length %lu", tx->payload_body_length);
 
                 // libsodium wants to have private and public keys concatenated
@@ -72,7 +85,7 @@ vertices_evt_handler(vtc_evt_t *evt) {
 
                 // sign the payload
                 crypto_sign_ed25519_detached(tx->signature,
-                                             nullptr, to_be_signed, tx->payload_body_length + 2, keys);
+                                             0, to_be_signed, tx->payload_body_length + 2, keys);
 
                 char b64_signature[128] = {0};
                 size_t b64_signature_len = sizeof(b64_signature);
@@ -89,14 +102,16 @@ vertices_evt_handler(vtc_evt_t *evt) {
         }
             break;
 
-        case VTC_EVT_TX_SENDING: {
+        case VTC_EVT_TX_SENDING:
+        {
             // let's create transaction files which can then be used with `goal clerk ...`
-            signed_transaction_t *tx = nullptr;
+            signed_transaction_t *tx = NULL;
             err_code = vertices_event_tx_get(evt->bufid, &tx);
 
             FILE *fstx = fopen(CONFIG_PATH "../signed_tx.bin", "wb");
 
-            if (fstx == nullptr) {
+            if (fstx == NULL)
+            {
                 return VTC_ERROR_NOT_FOUND;
             }
 
@@ -105,7 +120,8 @@ vertices_evt_handler(vtc_evt_t *evt) {
 
             FILE *ftx = fopen(CONFIG_PATH "../tx.bin", "wb");
 
-            if (ftx == nullptr) {
+            if (ftx == NULL)
+            {
                 return VTC_ERROR_NOT_FOUND;
             }
 
@@ -124,8 +140,7 @@ vertices_evt_handler(vtc_evt_t *evt) {
         }
             break;
 
-        default:
-            break;
+        default:break;
     }
 
     return err_code;
@@ -134,7 +149,8 @@ vertices_evt_handler(vtc_evt_t *evt) {
 /// Create new random account
 /// Account keys will be stored in files
 static ret_code_t
-create_new_account() {
+create_new_account(void)
+{
     ret_code_t err_code;
 
     unsigned char seed[crypto_sign_ed25519_SEEDBYTES] = {0};
@@ -150,10 +166,13 @@ create_new_account() {
     memcpy(alice_account.private_key, ed25519_sk, sizeof(alice_account.private_key));
 
     FILE *fw_priv = fopen(CONFIG_PATH "private_key.bin", "wb");
-    if (fw_priv == nullptr) {
+    if (fw_priv == NULL)
+    {
         LOG_ERROR("Cannot create " CONFIG_PATH "private_key.bin");
         return VTC_ERROR_NOT_FOUND;
-    } else {
+    }
+    else
+    {
         fwrite(ed25519_sk, 1, ADDRESS_LENGTH, fw_priv);
         fclose(fw_priv);
     }
@@ -164,7 +183,8 @@ create_new_account() {
 
     // we can now store the b32 address in a file
     FILE *fw_pub = fopen(CONFIG_PATH "public_b32.txt", "w");
-    if (fw_pub != nullptr) {
+    if (fw_pub != NULL)
+    {
         size_t len = strlen(alice_account.vtc_account->public_b32);
 
         fwrite(alice_account.vtc_account->public_b32, 1, len, fw_pub);
@@ -178,7 +198,8 @@ create_new_account() {
 /// Source the account using private/public keys from files.
 /// \return \c VTC_ERROR_NOT_FOUND account not found
 static ret_code_t
-load_existing_account() {
+load_existing_account(void)
+{
     ret_code_t err_code;
 
     char public_b32[PUBLIC_B32_STR_MAX_LENGTH] = {0};
@@ -188,14 +209,16 @@ load_existing_account() {
     // we either create a new random account or load it from private and public key files.
     // key files can also be generated using [`algokey`](https://developer.algorand.org/docs/reference/cli/algokey/generate/)
     FILE *f_priv = fopen(CONFIG_PATH "private_key.bin", "rb");
-    if (f_priv != nullptr) {
+    if (f_priv != NULL)
+    {
         LOG_INFO("🔑 Loading private key from: %s", CONFIG_PATH "private_key.bin");
 
         bytes_read = fread(alice_account.private_key, 1, ADDRESS_LENGTH, f_priv);
         fclose(f_priv);
     }
 
-    if (f_priv == nullptr || bytes_read != ADDRESS_LENGTH) {
+    if (f_priv == NULL || bytes_read != ADDRESS_LENGTH)
+    {
         LOG_WARNING(
                 "🤔 private_key.bin does not exist or keys not found. You can pass the -n flag to create a new account");
 
@@ -203,20 +226,24 @@ load_existing_account() {
     }
 
     FILE *f_pub = fopen(CONFIG_PATH "public_b32.txt", "r");
-    if (f_pub != nullptr) {
+    bytes_read = 0;
+    if (f_pub != NULL)
+    {
         LOG_INFO("🔑 Loading public key from: %s", CONFIG_PATH "public_b32.txt");
 
         bytes_read = fread(public_b32, 1, PUBLIC_B32_STR_MAX_LENGTH, f_pub);
         fclose(f_pub);
 
         size_t len = strlen(public_b32);
-        while (public_b32[len - 1] == '\n' || public_b32[len - 1] == '\r') {
+        while (public_b32[len - 1] == '\n' || public_b32[len - 1] == '\r')
+        {
             public_b32[len - 1] = '\0';
             len--;
         }
     }
 
-    if (f_pub == nullptr || bytes_read < ADDRESS_LENGTH) {
+    if (f_pub == NULL || bytes_read < ADDRESS_LENGTH)
+    {
         LOG_WARNING(
                 "🤔 public_b32.txt does not exist or keys not found. You can pass the -n flag to create a new account");
 
@@ -231,58 +258,42 @@ load_existing_account() {
     return VTC_SUCCESS;
 }
 
-int
-main(int argc, char *argv[]) {
-    ret_code_t err_code;
+ret_code_t err_code;
+bool create_new;
+tx_type_t run_tx;
 
-    bool create_new = false;                // bug fixing convert false to tru at first.
-    tx_type_t run_tx = PAY_TX;
+TEST_GROUP(UnrealSDK){
+    void setup() override {
 
-    int opt;
-    while ((opt = getopt(argc, argv, "npa")) != -1) {
-        switch (opt) {
-            case 'n': {
-                create_new = true;
-            }
-                break;
-            case 'p': {
-                run_tx = PAY_TX;
-            }
-                break;
-            case 'a': {
-                run_tx = APP_CALL_TX;
-            }
-                break;
-
-            default: {
-                fprintf(stderr,
-                        "Usage:\n%s [-p|-a] [-n] \nSend signed transaction on the blockchain.\n-p (default)\tSend [p]ayment (Alice sends tokens to Bob)\n-a\t\t\t\tSend [a]pplication call (Alice sends integer value to application)\n-n\t\t\t\tCreate [n]ew account",
-                        argv[0]);
-                exit(EXIT_FAILURE);
-            }
-        }
     }
+    void teardown() override {}
+};
+
+TEST(UnrealSDK, create_new_wallet) {
+    create_new = true;
+    run_tx = PAY_TX;
 
     LOG_INFO("😎 Vertices SDK running on Unix-based OS");
-
     int ret = sodium_init();
-    VTC_ASSERT_BOOL(ret == 0);
-
+    LONGS_EQUAL(ret, 1);
     // create new vertex
     err_code = vertices_new(&m_vertex);
-    VTC_ASSERT(err_code);
+    ENUMS_EQUAL_INT(err_code, VTC_SUCCESS);
 
     // making sure the provider is accessible
     err_code = vertices_ping();
-    VTC_ASSERT(err_code);
+    ENUMS_EQUAL_INT(err_code, VTC_SUCCESS);
 
     // ask for provider version
     provider_version_t version = {0};
     err_code = vertices_version(&version);
-    if (err_code == VTC_ERROR_OFFLINE) {
+    if (err_code == VTC_ERROR_OFFLINE)
+    {
         LOG_WARNING("Version might not be accurate: old value is being used");
-    } else {
-        VTC_ASSERT(err_code);
+    }
+    else
+    {
+        ENUMS_EQUAL_INT(err_code, VTC_SUCCESS);
     }
 
     LOG_INFO("🏎 Running on %s v.%u.%u.%u",
@@ -291,99 +302,223 @@ main(int argc, char *argv[]) {
              version.minor,
              version.patch);
 
-    // Several ways to create/load accounts:
-    if (create_new) {
-        // 1) create new one
-        err_code = create_new_account();
-        VTC_ASSERT(err_code);
-    } else {
-        // 2) from files
-        err_code = load_existing_account();
-        VTC_ASSERT(err_code);
-    }
+    // 1) create new one
+    err_code = create_new_account();
+    ENUMS_EQUAL_INT(err_code, VTC_SUCCESS);
 
     //  3) from b32 address
     //      Note: creating a receiver account is not mandatory to send money to the account
     //      but we can use it to load the public key from the account address
     err_code = vertices_account_new_from_b32((char *) ACCOUNT_RECEIVER, &bob_account.vtc_account);
-    VTC_ASSERT(err_code);
+    ENUMS_EQUAL_INT(err_code, VTC_SUCCESS);
 
     LOG_INFO("🤑 %f Algos on Alice's account (%s)",
              alice_account.vtc_account->amount / 1.e6,
              alice_account.vtc_account->public_b32);
 
-    if (alice_account.vtc_account->amount < 1001000) {
+    if (alice_account.vtc_account->amount < 1001000)
+    {
         LOG_ERROR(
                 "🙄 Amount available on account is too low to pass a transaction, consider adding Algos");
         LOG_INFO("👉 Go to https://bank.testnet.algorand.network/, dispense Algos to: %s",
                  alice_account.vtc_account->public_b32);
         LOG_INFO("😎 Then wait for a few seconds for transaction to pass...");
-/*        return 0;*/
+        // return
     }
 
-    switch (run_tx) {
-        case PAY_TX: {
-            // send assets from account 0 to account 1
-            char *notes = (char *) "Alice sent 1 Algo to Bob";
-            err_code =
-                    vertices_transaction_pay_new(alice_account.vtc_account,
-                                                 (char *) bob_account.vtc_account->public_b32 /* or ACCOUNT_RECEIVER */,
-                                                 AMOUNT_SENT,
-                                                 notes);
-            VTC_ASSERT(err_code);
-        }
-            break;
+    LOG_ERROR("Unknown action to run");
 
-        case APP_CALL_TX: {
-            // get application information
-            LOG_INFO("Application %u, global states", APP_ID);
-
-            app_values_t app_kv = {0};
-            err_code = vertices_application_get(APP_ID, &app_kv);
-            VTC_ASSERT(err_code);
-            for (uint32_t i = 0; i < app_kv.count; ++i) {
-                if (app_kv.values[i].type == VALUE_TYPE_INTEGER) {
-                    LOG_INFO("%s: %llu", app_kv.values[i].name, (long long unsigned) app_kv.values[i].value_uint);
-                } else if (app_kv.values[i].type == VALUE_TYPE_BYTESLICE) {
-                    LOG_INFO("%s: %s", app_kv.values[i].name, app_kv.values[i].value_slice);
-                }
-            }
-
-            // send application call
-            app_values_t kv = {0};
-            kv.count = 1;
-            kv.values[0].type = VALUE_TYPE_INTEGER;
-            kv.values[0].value_uint = 32;
-
-            err_code = vertices_transaction_app_call(alice_account.vtc_account, APP_ID, &kv);
-            VTC_ASSERT(err_code);
-        }
-            break;
-
-        default:
-            LOG_ERROR("Unknown action to run");
-    }
-
-    unsigned char *txID;
-    txID = new unsigned char[TRANSACTION_HASH_STR_MAX_LENGTH];
     // processing
     size_t queue_size = 1;
-    while (queue_size && err_code == VTC_SUCCESS) {
-        err_code = vertices_event_process(&queue_size, txID);
-        VTC_ASSERT(err_code);
-    }
-
-    if(err_code == VTC_SUCCESS)
+    while (queue_size && err_code == VTC_SUCCESS)
     {
-        LOG_INFO("👉 Haha This is transaction ID: %s",txID);
+        err_code = vertices_event_process(&queue_size);
     }
-
-    free(txID);
 
     // delete the created accounts from the Vertices wallet
     err_code = vertices_account_free(alice_account.vtc_account);
-    VTC_ASSERT(err_code);
+    ENUMS_EQUAL_INT(err_code, VTC_SUCCESS);
 
     err_code = vertices_account_free(bob_account.vtc_account);
+    ENUMS_EQUAL_INT(err_code, VTC_SUCCESS);
+}
+
+TEST(UnrealSDK, pay_transaction) {
+    create_new = true;
+    run_tx = PAY_TX;
+
+    LOG_INFO("😎 Vertices SDK running on Unix-based OS");
+    int ret = sodium_init();
+    LONGS_EQUAL(ret, 1);
+    // create new vertex
+    err_code = vertices_new(&m_vertex);
+    ENUMS_EQUAL_INT(err_code, VTC_SUCCESS);
+
+    // making sure the provider is accessible
+    err_code = vertices_ping();
+    ENUMS_EQUAL_INT(err_code, VTC_SUCCESS);
+
+    // ask for provider version
+    provider_version_t version = {0};
+    err_code = vertices_version(&version);
+    if (err_code == VTC_ERROR_OFFLINE)
+    {
+        LOG_WARNING("Version might not be accurate: old value is being used");
+    }
+    else
+    {
+        ENUMS_EQUAL_INT(err_code, VTC_SUCCESS);
+    }
+
+    LOG_INFO("🏎 Running on %s v.%u.%u.%u",
+             version.network,
+             version.major,
+             version.minor,
+             version.patch);
+
+    // 2) from files
+    err_code = load_existing_account();
+    ENUMS_EQUAL_INT(err_code, VTC_SUCCESS);
+
+    //  3) from b32 address
+    //      Note: creating a receiver account is not mandatory to send money to the account
+    //      but we can use it to load the public key from the account address
+    err_code = vertices_account_new_from_b32((char *) ACCOUNT_RECEIVER, &bob_account.vtc_account);
+    ENUMS_EQUAL_INT(err_code, VTC_SUCCESS);
+
+    LOG_INFO("🤑 %f Algos on Alice's account (%s)",
+             alice_account.vtc_account->amount / 1.e6,
+             alice_account.vtc_account->public_b32);
+
+    if (alice_account.vtc_account->amount < 1001000)
+    {
+        LOG_ERROR(
+                "🙄 Amount available on account is too low to pass a transaction, consider adding Algos");
+        LOG_INFO("👉 Go to https://bank.testnet.algorand.network/, dispense Algos to: %s",
+                 alice_account.vtc_account->public_b32);
+        LOG_INFO("😎 Then wait for a few seconds for transaction to pass...");
+        // return
+    }
+
+    // send assets from account 0 to account 1
+    char *notes = (char *) "Alice sent 1 Algo to Bob";
+    err_code =
+            vertices_transaction_pay_new(alice_account.vtc_account,
+                                         (char *) bob_account.vtc_account->public_b32 /* or ACCOUNT_RECEIVER */,
+                                         AMOUNT_SENT,
+                                         notes);
+    ENUMS_EQUAL_INT(err_code, VTC_SUCCESS);
+
+    // processing
+    size_t queue_size = 1;
+    while (queue_size && err_code == VTC_SUCCESS)
+    {
+        err_code = vertices_event_process(&queue_size);
+    }
+
+    // delete the created accounts from the Vertices wallet
+    err_code = vertices_account_free(alice_account.vtc_account);
+    ENUMS_EQUAL_INT(err_code, VTC_SUCCESS);
+
+    err_code = vertices_account_free(bob_account.vtc_account);
+    ENUMS_EQUAL_INT(err_code, VTC_SUCCESS);
+}
+
+TEST(UnrealSDK, call_transaction) {
+    create_new = false;
+    run_tx = APP_CALL_TX;
+
+    LOG_INFO("😎 Vertices SDK running on Unix-based OS");
+    int ret = sodium_init();
+    LONGS_EQUAL(ret, 0);
+    // create new vertex
+    err_code = vertices_new(&m_vertex);
+    ENUMS_EQUAL_INT(err_code, VTC_SUCCESS);
+
+    // making sure the provider is accessible
+    err_code = vertices_ping();
+    ENUMS_EQUAL_INT(err_code, VTC_SUCCESS);
+
+    // ask for provider version
+    provider_version_t version = {0};
+    err_code = vertices_version(&version);
+    if (err_code == VTC_ERROR_OFFLINE)
+    {
+        LOG_WARNING("Version might not be accurate: old value is being used");
+    }
+    else
+    {
+        ENUMS_EQUAL_INT(err_code, VTC_SUCCESS);
+    }
+
+    LOG_INFO("🏎 Running on %s v.%u.%u.%u",
+             version.network,
+             version.major,
+             version.minor,
+             version.patch);
+
+    // 2) from files
+    err_code = load_existing_account();
+    ENUMS_EQUAL_INT(err_code, VTC_SUCCESS);
+
+    //  3) from b32 address
+    //      Note: creating a receiver account is not mandatory to send money to the account
+    //      but we can use it to load the public key from the account address
+    err_code = vertices_account_new_from_b32((char *) ACCOUNT_RECEIVER, &bob_account.vtc_account);
+    ENUMS_EQUAL_INT(err_code, VTC_SUCCESS);
+
+    LOG_INFO("🤑 %f Algos on Alice's account (%s)",
+             alice_account.vtc_account->amount / 1.e6,
+             alice_account.vtc_account->public_b32);
+
+    if (alice_account.vtc_account->amount < 1001000)
+    {
+        LOG_ERROR(
+                "🙄 Amount available on account is too low to pass a transaction, consider adding Algos");
+        LOG_INFO("👉 Go to https://bank.testnet.algorand.network/, dispense Algos to: %s",
+                 alice_account.vtc_account->public_b32);
+        LOG_INFO("😎 TTTThen wait for a few seconds for transaction to pass...");
+        // return
+    }
+
+    // get application information
+    LOG_INFO("Application %u, global states", APP_ID);
+
+    app_values_t app_kv = {0};
+    err_code = vertices_application_get(APP_ID, &app_kv);
     VTC_ASSERT(err_code);
+    for (uint32_t i = 0; i < app_kv.count; ++i)
+    {
+        if (app_kv.values[i].type == VALUE_TYPE_INTEGER)
+        {
+            LOG_INFO("%s: %llu", app_kv.values[i].name, (long long unsigned)app_kv.values[i].value_uint);
+        }
+        else if (app_kv.values[i].type == VALUE_TYPE_BYTESLICE)
+        {
+            LOG_INFO("%s: %s", app_kv.values[i].name, app_kv.values[i].value_slice);
+        }
+    }
+
+    // send application call
+    app_values_t kv = {0};
+    kv.count = 1;
+    kv.values[0].type = VALUE_TYPE_INTEGER;
+    kv.values[0].value_uint = 32;
+
+    err_code = vertices_transaction_app_call(alice_account.vtc_account, APP_ID, &kv);
+    VTC_ASSERT(err_code);
+
+    // processing
+    size_t queue_size = 1;
+    while (queue_size && err_code == VTC_SUCCESS)
+    {
+        err_code = vertices_event_process(&queue_size);
+    }
+
+    // delete the created accounts from the Vertices wallet
+    err_code = vertices_account_free(alice_account.vtc_account);
+    ENUMS_EQUAL_INT(err_code, VTC_SUCCESS);
+
+    err_code = vertices_account_free(bob_account.vtc_account);
+    ENUMS_EQUAL_INT(err_code, VTC_SUCCESS);
 }

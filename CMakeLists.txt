@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.5)
 set(PROJECT_NAME Vertices-SDK)
 project(${PROJECT_NAME} C CXX)
-set(CMAKE_CXX_FLAGS "-std=c++20")
-set(CMAKE_C_FLAGS "-std=c11")
+#set(CMAKE_CXX_FLAGS "-std=c++11")
+#set(CMAKE_C_FLAGS "-std=c11")
 
 # Set variable VERTICES_ROOT to absolute path of that file location
 get_filename_component(VERTICES_ROOT . ABSOLUTE)
@@ -12,11 +12,14 @@ include(utils/utils.cmake)
 
 message(STATUS "💎 Loading targets")
 
+# Set built target ex.  unix_example or vertices.
+set(BUILT_TARGET "vertices")
 # Module path to find libs
 set(CMAKE_MODULE_PATH ${VERTICES_ROOT}/utils/)
 
 # default behaviour is to compile Unix example if current CMake file is used as
 # project root CMake
+
 if (CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
     set(COMPILE_UNIX ON)
 endif ()
@@ -44,24 +47,25 @@ else ()
 endif ()
 
 # lots of warnings and all warnings as errors
-add_compile_options(
-        -pedantic
-        -Wall
-        -Werror
-        -Wstrict-prototypes
-        -Wwrite-strings
-        -Wshadow
-        -Winit-self
-        -Wcast-align
-        -Wformat=2
-        -Wmissing-prototypes
-        -Wstrict-overflow=2
-        -Wc++-compat
-        -Wundef
-        -Wswitch-default
-        -Wconversion
-        -Wno-cast-align
-        -Wno-missing-braces)
+if(NOT MSVC)
+    add_compile_options(
+            -pedantic
+            -Wall
+            -Wstrict-prototypes
+            -Wwrite-strings
+            -Wshadow
+            -Winit-self
+            -Wcast-align
+            -Wformat=2
+            -Wmissing-prototypes
+            -Wstrict-overflow=2
+            -Wc++-compat
+            -Wundef
+            -Wswitch-default
+            -Wconversion
+            -Wno-cast-align
+            -Wno-missing-braces)
+endif()
 
 # Add vertices library
 add_subdirectory(src)

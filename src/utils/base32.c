@@ -6,7 +6,15 @@
 
 #include "utils/base32.h"
 
-ret_code_t
+#if defined _WIN32 || defined _WIN64
+#define BASE32_EXPORT __declspec(dllexport)
+#endif
+
+#ifndef BASE32_EXPORT
+#define BASE32_EXPORT
+#endif
+
+BASE32_EXPORT ret_code_t
 b32_encode(const char *data, size_t length, char *encoded, size_t *output_size)
 {
     if (length == 0)
@@ -58,7 +66,7 @@ b32_encode(const char *data, size_t length, char *encoded, size_t *output_size)
     return VTC_SUCCESS;
 }
 
-ret_code_t
+BASE32_EXPORT ret_code_t
 b32_decode(const char *encoded, char *decoded_data, size_t *output_size)
 {
     int buffer = 0;

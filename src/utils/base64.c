@@ -7,8 +7,14 @@
 #include "utils/base64.h"
 
 #include <stdint.h>
-#include "vertices_errors.h"
-#include <string.h>
+
+#if defined _WIN32 || defined _WIN64
+#define BASE64_EXPORT __declspec(dllexport)
+#endif
+
+#ifndef BASE64_EXPORT
+#define BASE64_EXPORT
+#endif
 
 // based on https://opensource.apple.com/source/QuickTimeStreamingServer/QuickTimeStreamingServer-452/CommonUtilitiesLib/base64.c
 
@@ -40,7 +46,7 @@ static char prv_get_char_from_word(uint32_t word, int offset) {
     return base64_table[(word >> (offset * 6)) & base64_mask];
 }
 
-ret_code_t
+BASE64_EXPORT ret_code_t
 b64_encode(const char *input, size_t input_size, char *encoded_data, size_t *output_size)
 {
     VTC_ASSERT_BOOL(input != NULL);
@@ -73,7 +79,7 @@ b64_encode(const char *input, size_t input_size, char *encoded_data, size_t *out
     return VTC_SUCCESS;
 }
 
-ret_code_t
+BASE64_EXPORT ret_code_t
 b64_decode(const char *input_data,
            size_t input_length,
            char *decoded_data,

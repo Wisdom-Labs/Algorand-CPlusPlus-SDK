@@ -1,5 +1,5 @@
 //
-// Created by Cyril on 09/04/2021.
+// Created by ubuntu on 10/5/22.
 //
 
 #include "CppUTest/MemoryLeakDetectorMallocMacros.h"
@@ -10,7 +10,7 @@
 #include <stddef.h>
 #include <string.h>
 
-#include "utils/base64.h"
+#include "base64.h"
 #include "vertices_log.h"
 #include "vertices_errors.h"
 
@@ -65,13 +65,13 @@ TEST(VerticesBase64, Test_All) {
     result[encode_len] = '\0';
 
     const char *expected_out_str =
-        "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8gISIjJCUm"
-        "JygpKissLS4vMDEyMzQ1Njc4OTo7PD0+P0BBQkNERUZHSElKS0xNT"
-        "k9QUVJTVFVWV1hZWltcXV5fYGFiY2RlZmdoaWprbG1ub3BxcnN0dX"
-        "Z3eHl6e3x9fn+AgYKDhIWGh4iJiouMjY6PkJGSk5SVlpeYmZqbnJ2"
-        "en6ChoqOkpaanqKmqq6ytrq+wsbKztLW2t7i5uru8vb6/wMHCw8TF"
-        "xsfIycrLzM3Oz9DR0tPU1dbX2Nna29zd3t/g4eLj5OXm5+jp6uvs7"
-        "e7v8PHy8/T19vf4+fr7/P3+/w==";
+            "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8gISIjJCUm"
+            "JygpKissLS4vMDEyMzQ1Njc4OTo7PD0+P0BBQkNERUZHSElKS0xNT"
+            "k9QUVJTVFVWV1hZWltcXV5fYGFiY2RlZmdoaWprbG1ub3BxcnN0dX"
+            "Z3eHl6e3x9fn+AgYKDhIWGh4iJiouMjY6PkJGSk5SVlpeYmZqbnJ2"
+            "en6ChoqOkpaanqKmqq6ytrq+wsbKztLW2t7i5uru8vb6/wMHCw8TF"
+            "xsfIycrLzM3Oz9DR0tPU1dbX2Nna29zd3t/g4eLj5OXm5+jp6uvs7"
+            "e7v8PHy8/T19vf4+fr7/P3+/w==";
     b64_encode((const char *) bin_in, bin_len, result, &encode_len);
 
     LONGS_EQUAL(strlen(expected_out_str), encode_len);

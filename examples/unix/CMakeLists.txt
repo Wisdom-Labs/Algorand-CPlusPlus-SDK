@@ -1,6 +1,8 @@
 set(PROJECT_NAME unix_example)
 project(${PROJECT_NAME} C CXX)
-set (CMAKE_CXX_FLAGS "-std=c++20")
+if (NOT MSVC)
+    set (CMAKE_CXX_FLAGS "-std=c++11")
+endif()
 set(SRC_FILES
         main.cpp
         vertices_ports/http_curl.cpp
@@ -26,32 +28,48 @@ else()
 endif()
 
 # lots of warnings and all warnings as errors
-add_compile_options(
-        -pedantic
-        -Wall
-        -Werror
-        -Wstrict-prototypes
-        -Wwrite-strings
-        -Wshadow
-        -Winit-self
-        -Wcast-align
-        -Wformat=2
-        -Wmissing-prototypes
-        -Wstrict-overflow=2
-        -Wc++-compat
-        -Wundef
-        -Wswitch-default
-        -Wconversion
-        -Wno-vla-extension
-        -Wno-missing-braces)
+if(NOT MSVC)
+    add_compile_options(
+            -pedantic
+            -Wall
+            -Wstrict-prototypes
+            -Wwrite-strings
+            -Wshadow
+            -Winit-self
+            -Wcast-align
+            -Wformat=2
+            -Wmissing-prototypes
+            -Wstrict-overflow=2
+            -Wc++-compat
+            -Wundef
+            -Wswitch-default
+            -Wconversion
+            -Wno-vla-extension
+            -Wno-missing-braces)
+endif ()
 
-# Find cURL
-find_package(CURL)
-include_directories(${CURL_INCLUDE_DIRS})
+if(MSVC OR MSYS OR MINGW)
+    # DLL ,  Link CURL & SODIUM on Windows
+    # please download & install sodium and curl and set environment variables
+    set(libcurl_INCLUDE_DIRS "C:/libcurl-7.85/include")
+    include_directories(${libcurl_INCLUDE_DIRS})
 
-# Import Vertices
-add_library(Vertices::vertices STATIC IMPORTED)
+    set(libsodium_INCLUDE_DIRS "C:/libsodium-1.0.17/include")
+    include_directories(${libsodium_INCLUDE_DIRS})
 
-include_directories(${INC_FOLDERS})
-add_executable(${PROJECT_NAME} ${SRC_FILES})
-target_link_libraries(${PROJECT_NAME} sodium curl vertices)
+    include_directories(${INC_FOLDERS})
+    add_executable(${PROJECT_NAME} ${SRC_FILES})
+    target_link_libraries(${PROJECT_NAME} C:/libsodium-1.0.17/lib/libsodium.dll.a C:/libcurl-7.85/lib/libcurl.dll.a vertices)
+elseif(UNIX AND NOT APPLE)
+    # Find cURL
+    find_package(CURL)
+    include_directories(${CURL_INCLUDE_DIRS})
+    include_directories(${INC_FOLDERS})
+    add_executable(${PROJECT_NAME} ${SRC_FILES})
+    target_link_libraries(${PROJECT_NAME} sodium curl vertices)
+else()  # MacOS
+
+endif()
+
+
+
