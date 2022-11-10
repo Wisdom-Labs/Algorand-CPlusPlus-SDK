@@ -64,10 +64,15 @@
 #define XXH_swap32 bswap32
 #define XXH_swap16 bswap16
 #elif defined(__APPLE__)
+
 #include <libkern/OSByteOrder.h>
+
 #define XXH_swap64 OSSwapInt64
 #define XXH_swap32 OSSwapInt32
 #define XXH_swap16 OSSwapInt16
+#define bswap_16(x) OSSwapInt16(x)
+#define bswap_32(x) OSSwapInt32(x)
+#define bswap_64(x) OSSwapInt64(x)
 #elif defined(WIN32)
 #include <stdlib.h>
 #define XXH_swap64 _byteswap_uin64
