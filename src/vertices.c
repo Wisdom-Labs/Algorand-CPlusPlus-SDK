@@ -36,6 +36,11 @@ typedef struct
 
 static vtc_events_buf_t m_events_queue = {0};
 
+VERTICES_EXPORT bool
+vertices_check_writable(){
+    return m_events_queue.rd_index == m_events_queue.wr_index;
+}
+
 /// Get node version
 /// \param version Pointer to \c provider_version_t
 /// \return
@@ -155,7 +160,7 @@ vertices_event_schedule(vtc_evt_t *evt)
 }
 
 VERTICES_EXPORT ret_code_t
-vertices_event_process(size_t * queue_size)
+vertices_event_process(size_t * queue_size, unsigned char * txID)
 {
     ret_code_t err_code = VTC_SUCCESS;
 
@@ -210,6 +215,11 @@ vertices_event_process(size_t * queue_size)
         {
             case VTC_EVT_TX_SUCCESS:
             {
+                // txID handling after success
+                signed_transaction_t *tx = NULL;
+                transaction_get(m_events_queue.evt[m_events_queue.rd_index].bufid, &tx);
+                memcpy(txID, tx->id, TRANSACTION_HASH_STR_MAX_LENGTH);
+
                 err_code = transaction_free(m_events_queue.evt[m_events_queue.rd_index].bufid);
             }
                 break;

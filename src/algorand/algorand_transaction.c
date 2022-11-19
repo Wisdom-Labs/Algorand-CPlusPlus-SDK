@@ -14,6 +14,7 @@
 #include <vertices_log.h>
 #include <vertices.h>
 #include <compilers.h>
+#include <stdlib.h>
 
 #define	htobe64(x)	((uint64_t)(x))
 
@@ -145,7 +146,13 @@ encode_tx(transaction_t *tx)
                     uint64_t value = tx->details->tx.appl.key_values->values[i].value_uint;
 
                     // convert to big endian
+#ifdef _WIN64 || _WIN32
+
+                    value = _byteswap_uint64(value);
+#else
                     value = htobe64(value);
+
+#endif
 
                     mpack_write_bin(&writer,
                                     (const char *) &value,

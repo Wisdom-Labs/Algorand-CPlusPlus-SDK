@@ -364,13 +364,22 @@ main(int argc, char *argv[]) {
             LOG_ERROR("Unknown action to run");
     }
 
+    unsigned char *txID = nullptr;
+    txID = new unsigned char[TRANSACTION_HASH_STR_MAX_LENGTH];
+
     // processing
     size_t queue_size = 1;
     while (queue_size && err_code == VTC_SUCCESS) {
-        err_code = vertices_event_process(&queue_size);
+        err_code = vertices_event_process(&queue_size, txID);
         VTC_ASSERT(err_code);
     }
 
+    if(err_code == VTC_SUCCESS)
+    {
+        LOG_INFO("👉 Haha This is transaction ID: %s",txID);
+    }
+
+    free(txID);
     // delete the created accounts from the Vertices wallet
     err_code = vertices_account_free(alice_account.vtc_account);
     VTC_ASSERT(err_code);

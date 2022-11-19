@@ -20,10 +20,6 @@
  * Examples of such implementations are available, see documentation at docs.vertices.network.
  */
 
-HTTP_WEAK_EXPORT void ExampleLibraryFunction(){
-
-}
-
 HTTP_WEAK_EXPORT ret_code_t set_http_init(ret_code_t (*http_init_handler)(const provider_info_t* provider,
                                                                         size_t(*response_payload_cb)(char* chunk,
                                                                                                      size_t chunk_size))) {
