@@ -45,7 +45,7 @@ if (COMPILE_UNIX)
             RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
             )
 
-    #copy vertices library to unreal plugin
+    #copy vertices library to vs 2019 unreal plugin
     add_custom_command(TARGET vertices  POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_directory
             ${CMAKE_BINARY_DIR}/bin
@@ -57,7 +57,7 @@ if (COMPILE_UNIX)
             ${CMAKE_BINARY_DIR}/bin
             ${CMAKE_BINARY_DIR}/../../UnrealAlgorandPlugin/Plugins/Algorand/Source/ThirdParty/AlgorandLibrary/x64/Release)
 
-    # copy cjson library to unreal plugin
+    # copy cjson library to vs 2019 unreal plugin
     add_custom_command(TARGET vertices  POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy
             ${CMAKE_BINARY_DIR}/external/cJSON/cjson.dll
@@ -68,6 +68,30 @@ if (COMPILE_UNIX)
             COMMAND ${CMAKE_COMMAND} -E copy
             ${CMAKE_BINARY_DIR}/external/cJSON/cjson.lib
             ${CMAKE_BINARY_DIR}/../../UnrealAlgorandPlugin/Plugins/Algorand/Source/ThirdParty/AlgorandLibrary/x64/Release)
+
+    #copy vertices library to JetBrains unreal plugin
+    add_custom_command(TARGET vertices  POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_directory
+            ${CMAKE_BINARY_DIR}/bin
+            ${CMAKE_BINARY_DIR}/../../../jetbrains/UnrealAlgorandPlugin/Plugins/Algorand/Binaries/ThirdParty/AlgorandLibrary/Win64
+            COMMAND ${CMAKE_COMMAND} -E copy_directory
+            ${CMAKE_BINARY_DIR}/lib
+            ${CMAKE_BINARY_DIR}/../../../jetbrains/UnrealAlgorandPlugin/Plugins/Algorand/Source/ThirdParty/AlgorandLibrary/x64/Release
+            COMMAND ${CMAKE_COMMAND} -E copy_directory
+            ${CMAKE_BINARY_DIR}/bin
+            ${CMAKE_BINARY_DIR}/../../../jetbrains/UnrealAlgorandPlugin/Plugins/Algorand/Source/ThirdParty/AlgorandLibrary/x64/Release)
+
+    # copy cjson library to JetBrains unreal plugin
+    add_custom_command(TARGET vertices  POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy
+            ${CMAKE_BINARY_DIR}/external/cJSON/cjson.dll
+            ${CMAKE_BINARY_DIR}/../../../jetbrains/UnrealAlgorandPlugin/Plugins/Algorand/Binaries/ThirdParty/AlgorandLibrary/Win64
+            COMMAND ${CMAKE_COMMAND} -E copy
+            ${CMAKE_BINARY_DIR}/external/cJSON/cjson.dll
+            ${CMAKE_BINARY_DIR}/../../../jetbrains/UnrealAlgorandPlugin/Plugins/Algorand/Source/ThirdParty/AlgorandLibrary/x64/Release
+            COMMAND ${CMAKE_COMMAND} -E copy
+            ${CMAKE_BINARY_DIR}/external/cJSON/cjson.lib
+            ${CMAKE_BINARY_DIR}/../../../jetbrains/UnrealAlgorandPlugin/Plugins/Algorand/Source/ThirdParty/AlgorandLibrary/x64/Release)
 
     target_include_directories(vertices
             PUBLIC
