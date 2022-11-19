@@ -13,8 +13,8 @@
 #define APPERROR_EXPORT __declspec(dllexport)
 #endif
 
-#ifndef EXAMPLELIBRARY_EXPORT
-#define EXAMPLELIBRARY_EXPORT
+#ifndef APPERROR_EXPORT
+#define APPERROR_EXPORT
 #endif
 
 /**

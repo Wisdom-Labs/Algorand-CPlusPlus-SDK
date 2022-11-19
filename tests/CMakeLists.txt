@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
 project(vertices_sdk_tests C CXX)
-set(CPPUTEST_HOME /home/ubuntu/cpputest)
 get_filename_component(VERTICES_TEST_ROOT . ABSOLUTE)
 set(VERTICES_ROOT ${VERTICES_TEST_ROOT}/..)
 add_definitions(-DVERTICES_ROOT="${VERTICES_ROOT}")
@@ -97,7 +96,6 @@ include_directories(${CURL_INCLUDE_DIRS})
 include_directories(${INC_FOLDERS})
 
 add_subdirectory(src/BasicTX)
-add_subdirectory(src/Vertices)
 add_subdirectory(src/Account)
 add_subdirectory(src/Base32)
 add_subdirectory(src/Base64)

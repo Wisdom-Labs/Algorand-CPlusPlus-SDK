@@ -15,25 +15,20 @@ make
 
 ```
 ├── Makefile // Invokes all the unit tests
-├── MakefileWorker.mk // Comes from CppUTest itself
-├── MakefileWorkerOverrides.mk // Injected overrides
 ├── build
 │   [...] // Where all the tests wind up
 ├── fakes
 │   // fakes for unit tests
 ├── mocks
 │   // mocks for unit tests
-├── makefiles // Each c file you unit test has a makefile here
-│   ├── Makefile_<module_name>.mk
-│   └── [...]
 ├── src // test source files
-└── test_*
+└── vertices_ports // HTTP Request
 ```
 
 # Adding a test
 
-- Add a new test makefile under test/makefiles/. These just list the sources you
-  will compile
+- Make sure you have set `CPPUTEST_HOME` on `tests/CMakeLists.txt`. 
+  * Linux - `set(CPPUTEST_HOME /home/ubuntu/cpputest)`
 - Add a new test file under tests/src for the module you want to test
 - `make`
 
