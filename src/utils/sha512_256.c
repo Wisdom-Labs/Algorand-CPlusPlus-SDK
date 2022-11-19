@@ -8,7 +8,15 @@
 #include "utils/sha512_256.h"
 #include "mbedtls/sha512.h"
 
-ret_code_t
+#if defined _WIN32 || defined _WIN64
+#define SHA512_256_EXPORT __declspec(dllexport)
+#endif
+
+#ifndef SHA512_256_EXPORT
+#define SHA512_256_EXPORT
+#endif
+
+SHA512_256_EXPORT ret_code_t
 sha512_256(unsigned char const *input,
            unsigned long ilen,
            unsigned char *output,

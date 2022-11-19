@@ -9,11 +9,19 @@
 
 #include "vertices_errors.h"
 
+#if defined _WIN32 || defined _WIN64
+#define SHA512_256_IMPORT __declspec(dllimport)
+#elif defined __linux__
+#define SHA512_256_IMPORT __attribute__((visibility("default")))
+#else
+#define SHA512_256_IMPORT
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-ret_code_t
+SHA512_256_IMPORT ret_code_t
 sha512_256(unsigned char const *input,
            unsigned long ilen,
            unsigned char *output,
