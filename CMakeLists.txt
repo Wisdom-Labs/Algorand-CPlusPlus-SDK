@@ -31,6 +31,9 @@ if (COMPILE_UNIX)
 
     include(utils/libs.cmake)
 
+    option(CJSON_OVERRIDE_BUILD_SHARED_LIBS "Override BUILD_SHARED_LIBS with CJSON_BUILD_SHARED_LIBS" ON)
+    option(CJSON_BUILD_SHARED_LIBS "Overrides BUILD_SHARED_LIBS if CJSON_OVERRIDE_BUILD_SHARED_LIBS is enabled" OFF)
+
     add_subdirectory(examples/unix)
     add_subdirectory(external/mbedtls)
     add_subdirectory(external/cJSON)
