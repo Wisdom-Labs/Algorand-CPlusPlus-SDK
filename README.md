@@ -27,9 +27,8 @@ At this sdk, there are some todo list to add new features:
 - add new functions to create wallet provider.
 
 > ⚠️  IMPORTANT
-> - The current version of the SDK is still *very early*.
-> - It is not advised to use it in a production environment.
-> - Use it at your own risk.
+> - The current version of the SDK is still *early*.
+> - Development is ongoing and new transactions cases to be added.
 
 ## 🧭 Repository structure
 
