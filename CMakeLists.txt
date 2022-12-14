@@ -14,6 +14,9 @@ message(STATUS "💎 Loading targets")
 
 # Set built target ex.  unix_example or vertices.
 set(BUILT_TARGET "vertices")
+if( NOT DEFINED BUILT_TARGET )
+    set(BUILT_TARGET "NONE")
+endif()
 # Module path to find libs
 set(CMAKE_MODULE_PATH ${VERTICES_ROOT}/utils/)
 
