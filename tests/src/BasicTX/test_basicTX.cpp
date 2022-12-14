@@ -262,14 +262,14 @@ ret_code_t err_code;
 bool create_new;
 tx_type_t run_tx;
 
-TEST_GROUP(UnrealSDK){
+TEST_GROUP(AlgorandSDK){
     void setup() override {
 
     }
     void teardown() override {}
 };
 
-TEST(UnrealSDK, create_new_wallet) {
+TEST(AlgorandSDK, create_new_wallet) {
     create_new = true;
     run_tx = PAY_TX;
 
@@ -343,7 +343,7 @@ TEST(UnrealSDK, create_new_wallet) {
     ENUMS_EQUAL_INT(err_code, VTC_SUCCESS);
 }
 
-TEST(UnrealSDK, pay_transaction) {
+TEST(AlgorandSDK, pay_transaction) {
     create_new = true;
     run_tx = PAY_TX;
 
@@ -424,7 +424,7 @@ TEST(UnrealSDK, pay_transaction) {
     ENUMS_EQUAL_INT(err_code, VTC_SUCCESS);
 }
 
-TEST(UnrealSDK, call_transaction) {
+TEST(AlgorandSDK, call_transaction) {
     create_new = false;
     run_tx = APP_CALL_TX;
 

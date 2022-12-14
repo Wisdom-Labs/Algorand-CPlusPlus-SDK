@@ -1,11 +1,11 @@
-# unreal-sdk-algorand
-This repo is providing unreal C++ sdk on algorand chain.
+# Algorand C++ SDK
+This repo is providing C++ sdk on algorand chain.
 =======
-# 💎 Unreal Algorand SDK
+# 💎 Algorand SDK
 
 ## 📑 Specifications
 
-The Unreal Algorand SDK provides developers with an easy way for devices to interact with Algorand chain.
+The Algorand SDK provides developers with an easy way for devices to interact with Algorand chain.
 
 We are doing our best to achieve those goals:
 
@@ -23,7 +23,7 @@ We are doing our best to achieve those goals:
 At this sdk, there are some todo list to add new features:
 
 - some bugs exists when compiling on some toolchains.  (Windows, Linux and Mac OS)
-- Update some actions for building tx and requesting api , which can integrate with unreal plugin easily. 
+- Update some actions for building tx and requesting api , which can integrate as a thirdparty plugin easily. 
 - add new functions to create wallet provider.
 
 > ⚠️  IMPORTANT
