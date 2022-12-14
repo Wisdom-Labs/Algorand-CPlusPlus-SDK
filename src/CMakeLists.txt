@@ -45,30 +45,6 @@ if (COMPILE_UNIX)
             RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
             )
 
-    #copy vertices library to vs 2019 unreal plugin
-    add_custom_command(TARGET vertices  POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_directory
-            ${CMAKE_BINARY_DIR}/bin
-            ${CMAKE_BINARY_DIR}/../../UnrealAlgorandPlugin/Plugins/Algorand/Binaries/ThirdParty/AlgorandLibrary/Win64
-            COMMAND ${CMAKE_COMMAND} -E copy_directory
-            ${CMAKE_BINARY_DIR}/lib
-            ${CMAKE_BINARY_DIR}/../../UnrealAlgorandPlugin/Plugins/Algorand/Source/ThirdParty/AlgorandLibrary/x64/Release
-            COMMAND ${CMAKE_COMMAND} -E copy_directory
-            ${CMAKE_BINARY_DIR}/bin
-            ${CMAKE_BINARY_DIR}/../../UnrealAlgorandPlugin/Plugins/Algorand/Source/ThirdParty/AlgorandLibrary/x64/Release)
-
-    #copy vertices library to JetBrains unreal plugin
-    add_custom_command(TARGET vertices  POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_directory
-            ${CMAKE_BINARY_DIR}/bin
-            ${CMAKE_BINARY_DIR}/../../../jetbrains/UnrealAlgorandPlugin/Plugins/Algorand/Binaries/ThirdParty/AlgorandLibrary/Win64
-            COMMAND ${CMAKE_COMMAND} -E copy_directory
-            ${CMAKE_BINARY_DIR}/lib
-            ${CMAKE_BINARY_DIR}/../../../jetbrains/UnrealAlgorandPlugin/Plugins/Algorand/Source/ThirdParty/AlgorandLibrary/x64/Release
-            COMMAND ${CMAKE_COMMAND} -E copy_directory
-            ${CMAKE_BINARY_DIR}/bin
-            ${CMAKE_BINARY_DIR}/../../../jetbrains/UnrealAlgorandPlugin/Plugins/Algorand/Source/ThirdParty/AlgorandLibrary/x64/Release)
-
     target_include_directories(vertices
             PUBLIC
             "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
